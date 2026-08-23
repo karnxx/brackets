@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://bfs58y1x06l1y"]
+
+[ext_resource type="Script" uid="uid://cyrpsfyqcpkmc" path="res://scsnes/player.gd" id="1_g1pio"]
+[ext_resource type="Texture2D" uid="uid://bvwgipqwclum2" path="res://icon.svg" id="1_v85hv"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ifeun"]
+size = Vector2(22, 42)
+
+[node name="player" type="CharacterBody2D" unique_id=1633221553]
+script = ExtResource("1_g1pio")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1663406754]
+shape = SubResource("RectangleShape2D_ifeun")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1793577053]
+scale = Vector2(0.171875, 0.3125)
+texture = ExtResource("1_v85hv")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1102482887]
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer" unique_id=37800934]
+offset_right = 1152.0
+offset_bottom = 648.0
