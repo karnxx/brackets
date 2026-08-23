@@ -2,9 +2,60 @@
 
 [ext_resource type="Script" uid="uid://cyrpsfyqcpkmc" path="res://scsnes/player.gd" id="1_g1pio"]
 [ext_resource type="Texture2D" uid="uid://bvwgipqwclum2" path="res://icon.svg" id="1_v85hv"]
+[ext_resource type="Texture2D" uid="uid://c400b3o45d5qp" path="res://assets/character1.png" id="3_ycj3m"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ifeun"]
 size = Vector2(22, 42)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u4bdd"]
+atlas = ExtResource("3_ycj3m")
+region = Rect2(0, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_exek1"]
+atlas = ExtResource("3_ycj3m")
+region = Rect2(32, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s2oxg"]
+atlas = ExtResource("3_ycj3m")
+region = Rect2(64, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bxi2k"]
+atlas = ExtResource("3_ycj3m")
+region = Rect2(96, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xpdb8"]
+atlas = ExtResource("3_ycj3m")
+region = Rect2(128, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ytkqp"]
+atlas = ExtResource("3_ycj3m")
+region = Rect2(160, 32, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_lfkbx"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u4bdd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_exek1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_s2oxg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bxi2k")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xpdb8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ytkqp")
+}],
+"loop": 1,
+"name": &"walk_down",
+"speed": 8.0
+}]
 
 [node name="player" type="CharacterBody2D" unique_id=1633221553]
 script = ExtResource("1_g1pio")
@@ -21,3 +72,10 @@ texture = ExtResource("1_v85hv")
 [node name="ColorRect" type="ColorRect" parent="CanvasLayer" unique_id=37800934]
 offset_right = 1152.0
 offset_bottom = 648.0
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1491817935]
+sprite_frames = SubResource("SpriteFrames_lfkbx")
+animation = &"walk_down"
+autoplay = "walk_down"
+frame_progress = 0.9719457
+speed_scale = 1.39
