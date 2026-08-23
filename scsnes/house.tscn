@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://nowqd6iyldsf"]
 
+[ext_resource type="Script" uid="uid://d2q67rmnf0h80" path="res://scsnes/house.gd" id="1_sq1hb"]
 [ext_resource type="Texture2D" uid="uid://0biomwkp6iix" path="res://assets/map/TopDownHouse_DoorsAndWindows.png" id="1_yyg7u"]
 [ext_resource type="Texture2D" uid="uid://uefgdhdoswb5" path="res://assets/map/TopDownHouse_FloorsAndWalls.png" id="2_sq1hb"]
 [ext_resource type="Texture2D" uid="uid://dao1o5t8cf4i5" path="res://assets/map/TopDownHouse_FloorsAndWalls_OpenDoors.png" id="3_d4xa1"]
@@ -975,6 +976,7 @@ sources/4 = SubResource("TileSetAtlasSource_dtwsk")
 sources/5 = SubResource("TileSetAtlasSource_4xou8")
 
 [node name="House" type="Node2D" unique_id=1267957700]
+script = ExtResource("1_sq1hb")
 
 [node name="tilers" type="TileMap" parent="." unique_id=1113906107]
 tile_set = SubResource("TileSet_ifeun")

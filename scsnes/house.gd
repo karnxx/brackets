@@ -1,11 +1,24 @@
 extends Node2D
 
+# 1 =lights on
+# 0 =lights off
+var state = 1
 
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	pass # Replace with function body.
+func _ready():
+	light_cycle()
+	
+func light_cycle():
+	while true:
+		state = 1
+		print("LIGHTS ON")
+		await get_tree().create_timer(10.0).timeout
+
+	state=0
+	print("LIGHTS OFF")
+	
+	await get_tree().create_time(5.0).timeout
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
+	
+	
+	
