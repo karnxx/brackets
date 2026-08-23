@@ -2,6 +2,7 @@ extends CharacterBody2D
 
 @onready var sprite = $AnimatedSprite2D
 
+var room = 0
 
 func _process(delta: float) -> void:
 	if get_parent().state == 1:
@@ -9,33 +10,29 @@ func _process(delta: float) -> void:
 	else:
 		$CanvasLayer/ColorRect.color = Color(0, 0, 0, 1)
 
+func set_camera_to_room():
+	var cam = $Camera2D
+	
+	var room_width = cam.limit_right - cam.limit_left
+	var viewport_width = get_viewport_rect().size.x
+	
+	var zoom_amount = viewport_width / room_width
+	
+	cam.zoom = Vector2(zoom_amount, zoom_amount)
 
 func _physics_process(delta: float) -> void:
 	var dir = Vector2.ZERO
-
 	if Input.is_action_pressed("ui_left"):
 		dir = Vector2.LEFT
-		sprite.play("walk_left")
-		sprite.flip_h = false
-
+		sprite.play("walk")
+		sprite.flip_h = true
 	elif Input.is_action_pressed("ui_right"):
 		dir = Vector2.RIGHT
-		sprite.play("walk_left")
-		sprite.flip_h = true
-
-	elif Input.is_action_pressed("ui_up"):
-		dir = Vector2.UP
-		sprite.play("walk_up")
+		sprite.play("walk")
 		sprite.flip_h = false
-
-	elif Input.is_action_pressed("ui_down"):
-		dir = Vector2.DOWN
-		sprite.play("walk_down")
-		sprite.flip_h = false
-
-	else:
-		sprite.stop()
-
+	if dir == Vector2.ZERO:
+		$AnimatedSprite2D.play("idle")
+	
 	if get_parent().state == 1:
 		velocity = dir * 120
 	else:
