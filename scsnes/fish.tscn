@@ -4,13 +4,14 @@
 [ext_resource type="Script" uid="uid://dovjj3oh4j3fb" path="res://scsnes/fish.gd" id="1_pkltl"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_e0yft"]
+size = Vector2(16, 14)
 
-[node name="Area2D" type="Area2D" unique_id=830003905 groups=["inter"]]
+[node name="fish" type="Area2D" unique_id=830003905 groups=["inter"]]
 z_index = 1
 script = ExtResource("1_pkltl")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=634078571]
-position = Vector2(0, 2)
+position = Vector2(0, 3)
 shape = SubResource("RectangleShape2D_e0yft")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1991675594]
