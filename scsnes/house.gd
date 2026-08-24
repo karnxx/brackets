@@ -14,9 +14,11 @@ func _ready():
 
 func light_cycle():
 	while true:
+		# LIGHTS ON
 		state = 1
 		darkness.color = Color.WHITE
 		print("LIGHTS ON")
+
 		for i in range(10, 0, -1):
 			timer_label.text = "LIGHTS\n00:%02d" % i
 
@@ -27,6 +29,7 @@ func light_cycle():
 
 			await get_tree().create_timer(1.0).timeout
 
+		# BLACKOUT
 		state = 0
 		darkness.color = Color(0.08, 0.08, 0.08)
 		print("LIGHTS OFF")
@@ -40,3 +43,14 @@ func light_cycle():
 				pulse_timer(false)
 
 			await get_tree().create_timer(1.0).timeout
+
+
+func pulse_timer(urgent):
+	var tween = create_tween()
+
+	if urgent:
+		timer_label.scale = Vector2(1.3, 1.3)
+	else:
+		timer_label.scale = Vector2(1.15, 1.15)
+
+	tween.tween_property(timer_label, "scale", Vector2.ONE, 0.2)

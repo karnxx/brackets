@@ -15,6 +15,9 @@ func _ready():
 	if not is_multiplayer_authority():
 		$Camera2D.enabled = false
 		$CanvasLayer.visible = false
+	else:
+		$Camera2D.enabled = true
+		$Camera2D.zoom = Vector2(2, 2)
 
 func _process(delta: float) -> void:
 	if get_parent() is not Control:
