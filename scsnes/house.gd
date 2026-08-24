@@ -14,11 +14,8 @@ func light_cycle():
 		state = 1
 		darkness.color = Color.WHITE
 		print("LIGHTS ON")
-
 		await get_tree().create_timer(10.0).timeout
-
 		state = 0
 		darkness.color = Color(0.08, 0.08, 0.08)
 		print("LIGHTS OFF")
-
 		await get_tree().create_timer(5.0).timeout
