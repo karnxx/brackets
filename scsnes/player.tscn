@@ -98,6 +98,7 @@ frame_progress = 0.102511585
 speed_scale = 1.39
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=949559158]
+offset = Vector2(2, 2)
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1316304440]
 replication_config = SubResource("SceneReplicationConfig_g1pio")
