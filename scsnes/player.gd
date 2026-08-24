@@ -7,6 +7,7 @@ var room = 0
 func _process(delta: float) -> void:
 	if get_parent().state == 1:
 		$CanvasLayer/ColorRect.color = Color(0, 0, 0, 0)
+	
 	else:
 		$CanvasLayer/ColorRect.color = Color(0, 0, 0, 1)
 		
