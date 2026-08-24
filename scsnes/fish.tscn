@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://c1fblhnsbv3ya"]
+
+[ext_resource type="Texture2D" uid="uid://bxbb7obgnbri8" path="res://assets/map/items/fish.png" id="1_e0yft"]
+[ext_resource type="Script" uid="uid://dovjj3oh4j3fb" path="res://scsnes/fish.gd" id="1_pkltl"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ifeun"]
+radius = 7.0
+
+[node name="fish" type="Area2D" unique_id=1976721162]
+script = ExtResource("1_pkltl")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1529727712]
+texture = ExtResource("1_e0yft")
+hframes = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1937010784]
+position = Vector2(0, 3)
+shape = SubResource("CircleShape2D_ifeun")

@@ -9,16 +9,17 @@ func _process(delta: float) -> void:
 		$CanvasLayer/ColorRect.color = Color(0, 0, 0, 0)
 	else:
 		$CanvasLayer/ColorRect.color = Color(0, 0, 0, 1)
-
+		
 func set_camera_to_room():
 	var cam = $Camera2D
-	
-	var room_width = cam.limit_right - cam.limit_left
-	var viewport_width = get_viewport_rect().size.x
-	
-	var zoom_amount = viewport_width / room_width
-	
+
+	var room_height = cam.limit_bottom - cam.limit_top
+
+	var zoom_amount = 648.0 / room_height
+
 	cam.zoom = Vector2(zoom_amount, zoom_amount)
+
+	cam.global_position.y = (cam.limit_top + cam.limit_bottom) / 2.0
 
 func _physics_process(delta: float) -> void:
 	var dir = Vector2.ZERO
