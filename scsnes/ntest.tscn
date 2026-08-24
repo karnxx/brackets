@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://bc2nlmitv6ycx"]
+
+[ext_resource type="Script" uid="uid://d07o6mgn5i0uj" path="res://scsnes/ntest.gd" id="1_ss8la"]
+
+[node name="ntest" type="Control" unique_id=1143410788]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ss8la")
+
+[node name="join" type="Button" parent="." unique_id=471100955]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
+text = "join
+"
+
+[node name="host" type="Button" parent="." unique_id=1828978691]
+layout_mode = 0
+offset_top = 31.0
+offset_right = 43.0
+offset_bottom = 62.0
+text = "host"
+
+[connection signal="pressed" from="join" to="." method="_on_join_pressed"]
+[connection signal="pressed" from="host" to="." method="_on_host_pressed"]
