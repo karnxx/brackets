@@ -6,46 +6,46 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ifeun"]
 size = Vector2(22, 42)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_g1pio"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_idle_1"]
 atlas = ExtResource("3_ycj3m")
 region = Rect2(0, 64, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_ycj3m"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_idle_2"]
 atlas = ExtResource("3_ycj3m")
 region = Rect2(32, 64, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_u4bdd"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_walk_1"]
 atlas = ExtResource("3_ycj3m")
 region = Rect2(0, 96, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_exek1"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_walk_2"]
 atlas = ExtResource("3_ycj3m")
 region = Rect2(32, 96, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_s2oxg"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_walk_3"]
 atlas = ExtResource("3_ycj3m")
 region = Rect2(64, 96, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_bxi2k"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_walk_4"]
 atlas = ExtResource("3_ycj3m")
 region = Rect2(96, 96, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_xpdb8"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_walk_5"]
 atlas = ExtResource("3_ycj3m")
 region = Rect2(128, 96, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_ytkqp"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_walk_6"]
 atlas = ExtResource("3_ycj3m")
 region = Rect2(160, 96, 32, 32)
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_v85hv"]
+[sub_resource type="SpriteFrames" id="SpriteFrames_player"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_g1pio")
+"texture": SubResource("AtlasTexture_idle_1")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_ycj3m")
+"texture": SubResource("AtlasTexture_idle_2")
 }],
 "loop": 1,
 "name": &"idle",
@@ -53,54 +53,48 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_u4bdd")
+"texture": SubResource("AtlasTexture_walk_1")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_exek1")
+"texture": SubResource("AtlasTexture_walk_2")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_s2oxg")
+"texture": SubResource("AtlasTexture_walk_3")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_bxi2k")
+"texture": SubResource("AtlasTexture_walk_4")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_xpdb8")
+"texture": SubResource("AtlasTexture_walk_5")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_ytkqp")
+"texture": SubResource("AtlasTexture_walk_6")
 }],
 "loop": 1,
 "name": &"walk",
 "speed": 5.0
 }]
 
-[node name="player" type="CharacterBody2D" unique_id=1633221553 groups=["plr"]]
+[node name="player" type="CharacterBody2D" unique_id=1433435195 groups=["plr"]]
 z_index = 1
 y_sort_enabled = true
 collision_mask = 2
 script = ExtResource("1_g1pio")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1663406754]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1468882601]
 shape = SubResource("RectangleShape2D_ifeun")
 
-[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1102482887]
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=390695929]
 
-[node name="ColorRect" type="ColorRect" parent="CanvasLayer" unique_id=37800934]
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer" unique_id=699014261]
 offset_right = 1152.0
 offset_bottom = 648.0
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1491817935]
-sprite_frames = SubResource("SpriteFrames_v85hv")
-animation = &"walk"
-frame_progress = 0.102511585
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1251127559]
+sprite_frames = SubResource("SpriteFrames_player")
+animation = &"idle"
 speed_scale = 1.39
 
-[node name="Camera2D" type="Camera2D" parent="." unique_id=949559158]
-<<<<<<< HEAD
-offset = Vector2(2, 2)
-
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1316304440]
-replication_config = SubResource("SceneReplicationConfig_g1pio")
-=======
->>>>>>> 0da43f87222c5c74248fb8b633fad1e6d674aef7
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1553096991]
