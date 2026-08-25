@@ -998,13 +998,13 @@ sources/4 = SubResource("TileSetAtlasSource_dtwsk")
 sources/5 = SubResource("TileSetAtlasSource_4xou8")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ifeun"]
-size = Vector2(302, 92)
+size = Vector2(304, 112)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1x3kl"]
-size = Vector2(191, 107)
+size = Vector2(192, 112)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_r3nmj"]
-size = Vector2(160, 110)
+size = Vector2(160, 112)
 
 [node name="House" type="Node2D" unique_id=1267957700]
 y_sort_enabled = true
@@ -1012,7 +1012,6 @@ script = ExtResource("1_sq1hb")
 
 [node name="Area2D" parent="." unique_id=830003905 instance=ExtResource("10_4mt0s")]
 position = Vector2(-128, -17)
-interact_distance = 25
 
 [node name="tilers" type="TileMap" parent="." unique_id=1113906107]
 tile_set = SubResource("TileSet_ifeun")
@@ -1043,7 +1042,7 @@ script = ExtResource("9_vkk0o")
 cords = Array[int]([-180, 131, -67, 49])
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="liv" unique_id=993535266]
-position = Vector2(-24, 1)
+position = Vector2(-24, -8)
 shape = SubResource("RectangleShape2D_ifeun")
 
 [node name="kit" type="Area2D" parent="." unique_id=785387789]
@@ -1052,7 +1051,7 @@ room = 1
 cords = Array[int]([-387, -189, -67, 49])
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="kit" unique_id=1558660090]
-position = Vector2(-287.5, -6.5)
+position = Vector2(-288, -8)
 shape = SubResource("RectangleShape2D_1x3kl")
 
 [node name="kit2" type="Area2D" parent="." unique_id=1987203401]
@@ -1061,7 +1060,7 @@ room = 2
 cords = Array[int]([-579, -413, -67, 49])
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="kit2" unique_id=824720082]
-position = Vector2(-496, -7)
+position = Vector2(-496, -8)
 shape = SubResource("RectangleShape2D_r3nmj")
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="." unique_id=1845838420]

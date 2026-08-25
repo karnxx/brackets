@@ -1,6 +1,6 @@
 extends Area2D
 
-@export var interact_distance := 10
+@export var interact_distance := 25
 
 var mouse_over := false
 
