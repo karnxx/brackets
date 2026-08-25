@@ -4,17 +4,20 @@ extends CharacterBody2D
 
 var room = 0
 
-@onready var sync = $MultiplayerSynchronizer
 
-func _ready():
-	var config = SceneReplicationConfig.new()
-	config.add_property(NodePath("..:position"))
-
-	sync.replication_config = config
-
+func _ready() -> void:
 	if not is_multiplayer_authority():
 		$Camera2D.enabled = false
 		$CanvasLayer.visible = false
+
+@rpc("any_peer", "call_local", "unreliable")
+func sync_state(pos: Vector2, anim: StringName, facing_left: bool):
+	if is_multiplayer_authority():
+		return
+
+	global_position = pos
+	sprite.play(anim)
+	sprite.flip_h = facing_left
 
 func _process(delta: float) -> void:
 	if get_parent() is not Control:
@@ -75,5 +78,7 @@ func _physics_process(delta: float) -> void:
 			velocity = dir * 120
 		else:
 			velocity = Vector2.ZERO
-
+			
 	move_and_slide()
+	
+	sync_state.rpc(global_position, $AnimatedSprite2D.animation, sprite.flip_h)

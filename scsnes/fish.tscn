@@ -8,6 +8,7 @@ size = Vector2(16, 14)
 
 [node name="fish" type="Area2D" unique_id=830003905 groups=["inter"]]
 z_index = 1
+y_sort_enabled = true
 script = ExtResource("1_pkltl")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=634078571]
