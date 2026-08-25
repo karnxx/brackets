@@ -1064,6 +1064,7 @@ cords = Array[int]([-579, -413, -67, 49])
 position = Vector2(-496, -7)
 shape = SubResource("RectangleShape2D_r3nmj")
 
+<<<<<<< HEAD
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1085246778]
 
 [node name="TimerBackground" type="ColorRect" parent="CanvasLayer" unique_id=1581043147]
@@ -1079,6 +1080,10 @@ offset_bottom = 23.0
 theme_override_font_sizes/font_size = 24
 text = "LIGHTS OUT IN: 10"
 horizontal_alignment = 1
+=======
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="." unique_id=1845838420]
+spawn_path = NodePath("..")
+>>>>>>> 0da43f87222c5c74248fb8b633fad1e6d674aef7
 
 [connection signal="body_entered" from="liv" to="liv" method="_on_body_entered"]
 [connection signal="body_entered" from="kit" to="kit" method="_on_body_entered"]

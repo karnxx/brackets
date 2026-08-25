@@ -75,11 +75,10 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_g1pio"]
-
 [node name="player" type="CharacterBody2D" unique_id=1633221553 groups=["plr"]]
+z_index = 1
 y_sort_enabled = true
-collision_layer = 0
+collision_mask = 2
 script = ExtResource("1_g1pio")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1663406754]
@@ -98,7 +97,10 @@ frame_progress = 0.102511585
 speed_scale = 1.39
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=949559158]
+<<<<<<< HEAD
 offset = Vector2(2, 2)
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1316304440]
 replication_config = SubResource("SceneReplicationConfig_g1pio")
+=======
+>>>>>>> 0da43f87222c5c74248fb8b633fad1e6d674aef7

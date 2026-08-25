@@ -1,11 +1,12 @@
 extends Node2D
 
-# 1 = lights on
-# 0 = lights off
 var state = 1
 
 @onready var darkness = $CanvasModulate
 @onready var timer_label = $CanvasLayer/BlackoutTimer
+
+
+
 
 
 func _ready():
@@ -17,6 +18,7 @@ func light_cycle():
 		# LIGHTS ON
 		state = 1
 		darkness.color = Color.WHITE
+<<<<<<< HEAD
 		print("LIGHTS ON")
 
 		for i in range(10, 0, -1):
@@ -54,3 +56,12 @@ func pulse_timer(urgent):
 		timer_label.scale = Vector2(1.15, 1.15)
 
 	tween.tween_property(timer_label, "scale", Vector2.ONE, 0.2)
+=======
+
+		await get_tree().create_timer(10.0).timeout
+
+		state = 0
+		darkness.color = Color(0.08, 0.08, 0.08)
+
+		await get_tree().create_timer(5.0).timeout
+>>>>>>> 0da43f87222c5c74248fb8b633fad1e6d674aef7

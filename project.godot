@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="brackets"
-run/main_scene="uid://nowqd6iyldsf"
+run/main_scene="uid://bc2nlmitv6ycx"
 config/features=PackedStringArray("4.7", "Forward Plus")
 config/icon="res://icon.svg"
 
