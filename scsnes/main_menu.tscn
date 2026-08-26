@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://cjgx5qk233lpl"]
 
 [ext_resource type="Script" uid="uid://col7pux5yplrv" path="res://scsnes/main_menu.gd" id="1_bwqms"]
+[ext_resource type="Texture2D" uid="uid://deob63e8xc6jb" path="res://assets/map/items/clock.png" id="2_7gebl"]
 
 [node name="MainMenu" type="Control" unique_id=724128871]
 layout_mode = 3
@@ -10,6 +11,23 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_bwqms")
+
+[node name="CLOCK BG" type="Sprite2D" parent="." unique_id=1535062895]
+position = Vector2(1000, 330)
+scale = Vector2(6, 6)
+texture = ExtResource("2_7gebl")
+region_enabled = true
+region_rect = Rect2(36.81989, 0, 24.130714, 49)
+
+[node name="DARK OVERLAY" type="ColorRect" parent="." unique_id=1906365450]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.12941177, 0.105882354, 0.09019608, 0.6509804)
 
 [node name="CenterContainer" type="CenterContainer" parent="." unique_id=928372366]
 layout_mode = 1
@@ -22,32 +40,63 @@ offset_bottom = 102.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=211596460]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-theme_override_constants/separation = 15
-
-[node name="PLAY" type="Button" parent="VBoxContainer" unique_id=1654067017]
-custom_minimum_size = Vector2(250, 55)
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer" unique_id=211596460]
+custom_minimum_size = Vector2(350, 70)
 layout_mode = 2
-text = "play
+theme_override_constants/separation = 12
+
+[node name="GameTitle" type="Label" parent="CenterContainer/VBoxContainer" unique_id=1795767359]
+custom_minimum_size = Vector2(350, 70)
+layout_mode = 2
+theme_override_font_sizes/font_size = 60
+text = "BRACKETS"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="subtittle" type="Label" parent="CenterContainer/VBoxContainer" unique_id=1393139586]
+custom_minimum_size = Vector2(350, 40)
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Trust nobody when the lights go out."
+horizontal_alignment = 1
+
+[node name="TitleSpacer" type="Control" parent="CenterContainer/VBoxContainer" unique_id=201466908]
+custom_minimum_size = Vector2(0, 15)
+layout_mode = 2
+
+[node name="PLAY" type="Button" parent="CenterContainer/VBoxContainer" unique_id=1654067017]
+custom_minimum_size = Vector2(350, 50)
+layout_mode = 2
+theme_override_colors/font_hover_color = Color(0.9098039, 0.7529412, 0.47843137, 1)
+theme_override_font_sizes/font_size = 22
+text = "PLAY
+
 "
 
-[node name="SETTINGS" type="Button" parent="VBoxContainer" unique_id=1341834731]
-custom_minimum_size = Vector2(250, 55)
+[node name="SETTINGS" type="Button" parent="CenterContainer/VBoxContainer" unique_id=1341834731]
+custom_minimum_size = Vector2(350, 50)
 layout_mode = 2
-text = "settings"
+theme_override_colors/font_hover_color = Color(0.9098039, 0.7529412, 0.47843137, 1)
+theme_override_font_sizes/font_size = 22
+text = "SETTINGS
 
-[node name="CREDITS" type="Button" parent="VBoxContainer" unique_id=111251144]
-custom_minimum_size = Vector2(250, 55)
-layout_mode = 2
-text = "credits"
-
-[node name="QUIT" type="Button" parent="VBoxContainer" unique_id=8718047]
-custom_minimum_size = Vector2(250, 55)
-layout_mode = 2
-text = "quit
 "
 
-[connection signal="pressed" from="VBoxContainer/PLAY" to="." method="_on_play_pressed"]
+[node name="CREDITS" type="Button" parent="CenterContainer/VBoxContainer" unique_id=111251144]
+custom_minimum_size = Vector2(350, 50)
+layout_mode = 2
+theme_override_colors/font_hover_color = Color(0.9098039, 0.7529412, 0.47843137, 1)
+theme_override_font_sizes/font_size = 22
+text = "CREDITS"
+
+[node name="QUIT" type="Button" parent="CenterContainer/VBoxContainer" unique_id=8718047]
+custom_minimum_size = Vector2(350, 50)
+layout_mode = 2
+theme_override_colors/font_hover_color = Color(0.9098039, 0.7529412, 0.47843137, 1)
+theme_override_font_sizes/font_size = 22
+text = "QUIT
+
+"
+
+[connection signal="pressed" from="CenterContainer/VBoxContainer/PLAY" to="." method="_on_play_pressed"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/QUIT" to="." method="_on_quit_pressed"]
