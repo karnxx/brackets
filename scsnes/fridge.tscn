@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://k2becg1ujjda"]
+
+[ext_resource type="Script" uid="uid://cgyxhn7ogc2ox" path="res://scsnes/fridge.gd" id="1_4jyab"]
+[ext_resource type="Texture2D" uid="uid://boj2wp151slml" path="res://assets/map/items/fridge.png" id="1_isyvn"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ifeun"]
+size = Vector2(28, 56)
+
+[node name="fridge" type="Area2D" unique_id=658590000]
+z_index = 1
+script = ExtResource("1_4jyab")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1653498496]
+shape = SubResource("RectangleShape2D_ifeun")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=157661279]
+texture = ExtResource("1_isyvn")
+hframes = 2
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
