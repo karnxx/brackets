@@ -1,0 +1,54 @@
+[gd_scene format=3 uid="uid://cgvjrkxptem5o"]
+
+[ext_resource type="Script" uid="uid://doc4asm31hno6" path="res://scsnes/settings.gd" id="1_krnoe"]
+
+[node name="Control" type="Control" unique_id=1586088931]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_krnoe")
+
+[node name="BACKGROUND" type="ColorRect" parent="." unique_id=1038365005]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.24306285, 0.20345321, 0.17969874, 1)
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=1903404939]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer" unique_id=1438993441]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Title" type="Label" parent="CenterContainer/VBoxContainer" unique_id=552651971]
+layout_mode = 2
+theme_override_font_sizes/font_size = 36
+
+[node name="VolumeLabel" type="Label" parent="CenterContainer/VBoxContainer" unique_id=1017440840]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+
+[node name="VolumeSlider" type="HSlider" parent="CenterContainer/VBoxContainer" unique_id=1778193684]
+layout_mode = 2
+value = 100.0
+
+[node name="FullscreenToggle" type="CheckButton" parent="CenterContainer/VBoxContainer" unique_id=747992931]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+
+[node name="Back" type="Button" parent="CenterContainer/VBoxContainer" unique_id=601921687]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+
+[connection signal="value_changed" from="CenterContainer/VBoxContainer/VolumeSlider" to="." method="_on_volume_slider_value_changed"]
+[connection signal="toggled" from="CenterContainer/VBoxContainer/FullscreenToggle" to="." method="_on_fullscreen_toggle_toggled"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/Back" to="." method="_on_back_pressed"]
