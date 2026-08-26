@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="brackets"
-run/main_scene="uid://bc2nlmitv6ycx"
+run/main_scene="uid://cjgx5qk233lpl"
 config/features=PackedStringArray("4.7", "Forward Plus")
 config/icon="res://icon.svg"
 
@@ -22,7 +22,6 @@ NetworkManager="*uid://bdgqsjwsec1i4"
 [display]
 
 window/stretch/mode="canvas_items"
-window/stretch/aspect="expand"
 
 [editor_plugins]
 

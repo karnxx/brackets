@@ -98,3 +98,4 @@ animation = &"idle"
 speed_scale = 1.39
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1553096991]
+zoom = Vector2(2, 2)

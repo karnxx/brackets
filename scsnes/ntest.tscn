@@ -11,19 +11,28 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_ss8la")
 
-[node name="join" type="Button" parent="." unique_id=471100955]
-layout_mode = 0
-offset_right = 8.0
-offset_bottom = 8.0
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=41486678]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer" unique_id=988111591]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="join" type="Button" parent="CenterContainer" unique_id=471100955]
+custom_minimum_size = Vector2(300, 70)
+layout_mode = 2
 text = "join
 "
 
-[node name="host" type="Button" parent="." unique_id=1828978691]
-layout_mode = 0
-offset_top = 31.0
-offset_right = 43.0
-offset_bottom = 62.0
+[node name="host" type="Button" parent="CenterContainer" unique_id=1828978691]
+custom_minimum_size = Vector2(300, 70)
+layout_mode = 2
 text = "host"
 
-[connection signal="pressed" from="join" to="." method="_on_join_pressed"]
-[connection signal="pressed" from="host" to="." method="_on_host_pressed"]
+[connection signal="pressed" from="CenterContainer/join" to="." method="_on_join_pressed"]
+[connection signal="pressed" from="CenterContainer/host" to="." method="_on_host_pressed"]

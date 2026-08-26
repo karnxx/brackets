@@ -1,5 +1,7 @@
 [gd_scene format=3 uid="uid://cjgx5qk233lpl"]
 
+[ext_resource type="Script" uid="uid://col7pux5yplrv" path="res://scsnes/main_menu.gd" id="1_bwqms"]
+
 [node name="MainMenu" type="Control" unique_id=724128871]
 layout_mode = 3
 anchors_preset = 15
@@ -7,14 +9,45 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_bwqms")
 
 [node name="CenterContainer" type="CenterContainer" parent="." unique_id=928372366]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_top = 102.0
+offset_right = -17.0
+offset_bottom = 102.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer" unique_id=1858448206]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=211596460]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_constants/separation = 15
+
+[node name="PLAY" type="Button" parent="VBoxContainer" unique_id=1654067017]
+custom_minimum_size = Vector2(250, 55)
 layout_mode = 2
+text = "play
+"
+
+[node name="SETTINGS" type="Button" parent="VBoxContainer" unique_id=1341834731]
+custom_minimum_size = Vector2(250, 55)
+layout_mode = 2
+text = "settings"
+
+[node name="CREDITS" type="Button" parent="VBoxContainer" unique_id=111251144]
+custom_minimum_size = Vector2(250, 55)
+layout_mode = 2
+text = "credits"
+
+[node name="QUIT" type="Button" parent="VBoxContainer" unique_id=8718047]
+custom_minimum_size = Vector2(250, 55)
+layout_mode = 2
+text = "quit
+"
+
+[connection signal="pressed" from="VBoxContainer/PLAY" to="." method="_on_play_pressed"]
