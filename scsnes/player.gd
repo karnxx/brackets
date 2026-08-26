@@ -1,27 +1,18 @@
 extends CharacterBody2D
 
 @onready var sprite = $AnimatedSprite2D
-@onready var camera = $Camera2D
-@onready var canvas_layer = $CanvasLayer
 
 var room = 0
 
 
 func _ready() -> void:
 	if not is_multiplayer_authority():
-		camera.enabled = false
-		canvas_layer.visible = false
-		return
-
-	canvas_layer.visible = true
-
-	await get_tree().process_frame
-
-	camera.enabled = true
-	camera.make_current()
-	camera.zoom = Vector2(2.8, 2.8)
-
-	print("LOCAL PLAYER CAMERA ENABLED: ", multiplayer.get_unique_id())
+		$Camera2D.enabled = false
+		$CanvasLayer.visible = false
+	else:
+		$Camera2D.enabled = true
+		set_camera_to_room()
+		print("LOCAL PLAYER CAMERA ENABLED: ", multiplayer.get_unique_id())
 
 
 @rpc("any_peer", "call_local", "unreliable")
@@ -34,7 +25,7 @@ func sync_state(pos: Vector2, anim: StringName, facing_left: bool):
 	sprite.flip_h = facing_left
 
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	if get_parent() is not Control:
 		if get_parent().state == 1:
 			$CanvasLayer/ColorRect.visible = false
@@ -73,50 +64,58 @@ func get_hovered_item():
 
 
 func set_camera_to_room():
-	if not is_multiplayer_authority():
-		return
+	var cam = $Camera2D
 
-	var room_height = camera.limit_bottom - camera.limit_top
-
-	if room_height <= 0:
-		return
-
+	var room_height = cam.limit_bottom - cam.limit_top
 	var zoom_amount = 648.0 / room_height
 
-	camera.zoom = Vector2(zoom_amount, zoom_amount)
-
-	camera.global_position.y = (
-		camera.limit_top + camera.limit_bottom
-	) / 2.0
+	cam.zoom = Vector2(zoom_amount, zoom_amount)
+	cam.global_position.y = (cam.limit_top + cam.limit_bottom) / 2.0
 
 
-func _physics_process(_delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	if not is_multiplayer_authority():
 		return
 
 	var dir = Vector2.ZERO
 
-	if Input.is_action_pressed("ui_left"):
-		dir = Vector2.LEFT
-		sprite.play("walk")
-		sprite.flip_h = true
+	# WASD MOVEMENT
+	if Input.is_action_pressed("move_left"):
+		dir.x -= 1
 
-	elif Input.is_action_pressed("ui_right"):
-		dir = Vector2.RIGHT
-		sprite.play("walk")
-		sprite.flip_h = false
+	if Input.is_action_pressed("move_right"):
+		dir.x += 1
 
-	if dir == Vector2.ZERO:
+	if Input.is_action_pressed("move_up"):
+		dir.y -= 1
+
+	if Input.is_action_pressed("move_down"):
+		dir.y += 1
+
+	# Prevent diagonal movement from being faster
+	if dir != Vector2.ZERO:
+		dir = dir.normalized()
+		sprite.play("walk")
+
+		if dir.x < 0:
+			sprite.flip_h = true
+		elif dir.x > 0:
+			sprite.flip_h = false
+	else:
 		sprite.play("idle")
 
+	# Only allow movement while lights/game state allows it
 	if get_parent() is not Control:
 		if get_parent().state == 1:
 			velocity = dir * 120
 		else:
 			velocity = Vector2.ZERO
+	else:
+		velocity = dir * 120
 
 	move_and_slide()
 
+	# Send movement to the other player
 	sync_state.rpc(
 		global_position,
 		sprite.animation,
