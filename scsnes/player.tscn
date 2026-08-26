@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://bfs58y1x06l1y"]
 
 [ext_resource type="Script" uid="uid://cyrpsfyqcpkmc" path="res://scsnes/player.gd" id="1_g1pio"]
+[ext_resource type="FontFile" uid="uid://5ku3dbw8g1jl" path="res://scsnes/PressStart2P-Regular.ttf" id="3_u4bdd"]
 [ext_resource type="Texture2D" uid="uid://c400b3o45d5qp" path="res://assets/character1.png" id="3_ycj3m"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ifeun"]
@@ -87,10 +88,15 @@ shape = SubResource("RectangleShape2D_ifeun")
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=390695929]
 
 [node name="ColorRect" type="ColorRect" parent="CanvasLayer" unique_id=699014261]
+visible = false
 offset_right = 1152.0
 offset_bottom = 648.0
 mouse_filter = 2
 color = Color(0, 0, 0, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer" unique_id=1557747632]
+offset_right = 211.0
+offset_bottom = 287.0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1251127559]
 sprite_frames = SubResource("SpriteFrames_player")
@@ -99,3 +105,12 @@ speed_scale = 1.39
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1553096991]
 zoom = Vector2(2, 2)
+
+[node name="Label" type="Label" parent="." unique_id=1340546001]
+offset_left = -25.0
+offset_top = -23.0
+offset_right = 25.0
+theme_override_fonts/font = ExtResource("3_u4bdd")
+theme_override_font_sizes/font_size = 8
+text = "bravo"
+horizontal_alignment = 1
