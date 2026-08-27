@@ -17,7 +17,7 @@ func _ready() -> void:
 		$Camera2D.enabled = false
 		$CanvasLayer.visible = false
 	else:
-		get_parent().black.connect(carry_role())
+		get_parent().black.connect(carry_role)
 		$Camera2D.enabled = true
 		set_camera_to_room()
 		print("LOCAL PLAYER CAMERA ENABLED: ", multiplayer.get_unique_id())

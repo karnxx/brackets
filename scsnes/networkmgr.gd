@@ -120,11 +120,11 @@ func roleassigng():
 	if randa <= medweight or randa <= intweight:
 		var randa2 = randf()
 		if randa2 <= 0.5 and roles["MEDIC"] == 0:
-			return "medic"
 			roles["MEDIC"] = 1
+			return "medic"
 		elif roles["INTRUDER"] == 0:
-			return "intruder"
 			roles["INTRUDER"] = 1
+			return "intruder"
 		else:
 			return "resident"
 	else:
