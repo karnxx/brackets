@@ -5,21 +5,19 @@ extends CharacterBody2D
 var room = 0
 
 var role
-
 var namnam
-
 var is_using = false
-
-var shield = true
-
+var shield = false
 var ded = false
 
+
 func _ready() -> void:
+	$Label.text = namnam
 	if not is_multiplayer_authority():
 		$Camera2D.enabled = false
 		$CanvasLayer.visible = false
 	else:
-		$Label.text = namnam
+		get_parent().black.connect(carry_role())
 		$Camera2D.enabled = true
 		set_camera_to_room()
 		print("LOCAL PLAYER CAMERA ENABLED: ", multiplayer.get_unique_id())
@@ -99,6 +97,11 @@ func _physics_process(delta: float) -> void:
 		sprite.flip_h
 	)
 
+func cleachoiuca():
+	is_using = false
+	for i in $CanvasLayer/VBoxContainer.get_children():
+		i.queue_free()
+
 func carry_role():
 	if role == "intruder":
 		is_using = true
@@ -121,10 +124,12 @@ func die():
 	if shield:
 		shield = false
 		return
+	remove_from_group("plr")
 	ded = true
 
 @rpc("any_peer", "call_local")
 func revive():
+	add_to_group("plr")
 	ded = false
 
 func use(bitun):
@@ -136,3 +141,19 @@ func use(bitun):
 				bitun.revive.rpc()
 			else:
 				bitun.shield = true
+		cleachoiuca()
+
+func vote():
+	lastvote = null
+	for i in get_tree().get_nodes_in_group("plr"):
+			if i != self:
+				var bitun : Button = preload("res://scsnes/chooseb.tscn").instantiate()
+				bitun.text = i.namnam
+				bitun.pressed.connect(add_vote.bind(i))
+				$CanvasLayer/VBoxContainer.add_child(bitun)
+
+var lastvote
+func add_vote(who):
+	if lastvote != who:
+		get_parent().plrdex[who] += 1
+		lastvote = who

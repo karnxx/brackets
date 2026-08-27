@@ -5,6 +5,7 @@ const MAX_PLAYERS := 2
 const PLAYER_SCENE = preload("res://scsnes/player.tscn")
 
 var spawned_players: Array[int] = []
+var player_data: Dictionary = {}
 
 var roles =  {
 	"INTRUDER":0, "RESIDENT":0, "MEDIC":0
@@ -66,17 +67,29 @@ func request_spawn():
 	var new_player_id = multiplayer.get_remote_sender_id()
 	print("Spawn requested by: ", new_player_id)
 	for existing_id in spawned_players:
-		spawn_player.rpc_id(new_player_id, existing_id)
+		var data = player_data[existing_id]
+		spawn_player.rpc_id(
+			new_player_id,
+			existing_id,
+			data["role"],
+			data["name"]
+		)
 	_register_and_spawn(new_player_id)
 
 func _register_and_spawn(id: int):
 	if id in spawned_players:
 		return
 	spawned_players.append(id)
-	spawn_player.rpc(id)
+	var player_role = roleassigng()
+	var player_name = nameassign()
+	player_data[id] = {
+		"role": player_role,
+		"name": player_name
+	}
+	spawn_player.rpc(id, player_role, player_name)
 
 @rpc("authority", "call_local", "reliable")
-func spawn_player(id: int):
+func spawn_player(id: int, assigned_role: String, assigned_name: String):
 	if get_tree().current_scene == null:
 		return
 	if get_tree().current_scene.has_node(str(id)):
@@ -84,14 +97,14 @@ func spawn_player(id: int):
 	var player = PLAYER_SCENE.instantiate()
 	player.name = str(id)
 	player.set_multiplayer_authority(id)
-	roleassigng(player)
-	nameassign(player)
+	player.role = assigned_role
+	player.namnam = assigned_name
 	get_tree().current_scene.add_child(player)
 	print(
-		"Spawned player: ",
-		id,
-		" | Local ID: ",
-		multiplayer.get_unique_id()
+		"Spawned player: ", id,
+		" | Role: ", player.role,
+		" | Name: ", player.namnam,
+		" | Local ID: ", multiplayer.get_unique_id()
 	)
 
 func _on_peer_disconnected(id: int):
@@ -102,20 +115,20 @@ func _on_peer_disconnected(id: int):
 	if player:
 		player.queue_free()
 
-func roleassigng(plr):
+func roleassigng():
 	var randa = randf()
 	if randa <= medweight or randa <= intweight:
 		var randa2 = randf()
 		if randa2 <= 0.5 and roles["MEDIC"] == 0:
-			plr.role = "medic"
+			return "medic"
 			roles["MEDIC"] = 1
 		elif roles["INTRUDER"] == 0:
-			plr.role = "intruder"
+			return "intruder"
 			roles["INTRUDER"] = 1
 		else:
-			plr.role = "resident"
+			return "resident"
 	else:
-		plr.role = "resident"
+		return "resident"
 
-func nameassign(plr):
-	plr.namnam = names.pick_random()
+func nameassign():
+	return names.pick_random()
