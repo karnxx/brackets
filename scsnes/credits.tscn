@@ -1,0 +1,66 @@
+[gd_scene format=3 uid="uid://c0ejny0hx1p7g"]
+
+[ext_resource type="Script" uid="uid://cull4eskcl0uy" path="res://scsnes/credits.gd" id="1_mv30i"]
+
+[node name="Credis" type="Control" unique_id=1905548153]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_mv30i")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=802642110]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.45693743, 0.3488968, 0.14674649, 1)
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=1482930961]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer" unique_id=1704049687]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="TITLe" type="Label" parent="CenterContainer/VBoxContainer" unique_id=1883061051]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "CREDITS
+"
+
+[node name="GameCredit" type="Label" parent="CenterContainer/VBoxContainer" unique_id=1332684654]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "BRACKETS"
+
+[node name="DevCredit" type="Label" parent="CenterContainer/VBoxContainer" unique_id=646848272]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Programming / UI: Krishiv
+Art / Backend: Karna"
+
+[node name="ArtCredit" type="Label" parent="CenterContainer/VBoxContainer" unique_id=1515710975]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "art: karna"
+
+[node name="Back" type="Button" parent="CenterContainer/VBoxContainer" unique_id=1220584106]
+custom_minimum_size = Vector2(350, 55)
+layout_mode = 2
+theme_override_colors/font_hover_color = Color(0.76380837, 0.4769529, 0.24287346, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.9098039, 0.7529412, 0.47843137, 1)
+theme_override_font_sizes/font_size = 20
+text = "BACK
+"
+
+[connection signal="pressed" from="CenterContainer/VBoxContainer/Back" to="." method="_on_back_pressed"]
