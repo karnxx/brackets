@@ -1067,18 +1067,19 @@ shape = SubResource("RectangleShape2D_r3nmj")
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1085246778]
 
 [node name="TimerBackground" type="ColorRect" parent="CanvasLayer" unique_id=1581043147]
-offset_left = 8.0
-offset_top = 8.0
+offset_left = 1.0
+offset_top = 1.0
 offset_right = 128.0
 offset_bottom = 73.0
 color = Color(0.09019608, 0.10980392, 0.047058824, 0.6666667)
 
 [node name="BlackoutTimer" type="Label" parent="CanvasLayer" unique_id=1515612228]
-offset_right = 120.0
-offset_bottom = 65.0
+offset_right = 128.0
+offset_bottom = 71.0
 theme_override_font_sizes/font_size = 24
 text = "LIGHTS OUT IN: 10"
 horizontal_alignment = 1
+autowrap_mode = 3
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="." unique_id=1845838420]
 spawn_path = NodePath("..")
