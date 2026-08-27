@@ -1,0 +1,67 @@
+[gd_scene format=3 uid="uid://drlvjqgna74og"]
+
+[ext_resource type="Script" uid="uid://bntn4ndt0sqqq" path="res://scsnes/role_reveal.gd" id="1_06syu"]
+[ext_resource type="Texture2D" uid="uid://dph8n5k67ht0h" path="res://assets/image (10).png" id="2_bly62"]
+
+[node name="RoleReveal" type="Control" unique_id=1437011798]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_06syu")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=2022799286]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.09019608, 0.078431375, 0.07058824, 1)
+
+[node name="KNIFE" type="Sprite2D" parent="." unique_id=2009922934]
+modulate = Color(0.6715141, 0.67151415, 0.6715141, 1)
+position = Vector2(850, 305)
+scale = Vector2(3.5, 3.5)
+texture = ExtResource("2_bly62")
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=779860529]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer" unique_id=2093853769]
+custom_minimum_size = Vector2(500, 260)
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(-90, 0)
+theme_override_constants/separation = 20
+
+[node name="Title" type="Label" parent="CenterContainer/VBoxContainer" unique_id=147609909]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8117647, 0.78039217, 0.7490196, 1)
+theme_override_font_sizes/font_size = 22
+text = "YOUR ROLE
+"
+horizontal_alignment = 1
+
+[node name="RoleName" type="Label" parent="CenterContainer/VBoxContainer" unique_id=915532613]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9098039, 0.7529412, 0.47843137, 1)
+theme_override_font_sizes/font_size = 48
+text = "RESIDENT
+"
+horizontal_alignment = 1
+
+[node name="Description" type="Label" parent="CenterContainer/VBoxContainer" unique_id=482063750]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9098039, 0.8901961, 0.8745098, 1)
+theme_override_font_sizes/font_size = 19
+text = "Survive the blackout.
+Find the intruder."
+horizontal_alignment = 1
