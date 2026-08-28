@@ -1088,6 +1088,7 @@ offset_left = 6.0
 offset_top = 150.0
 offset_right = 48.0
 offset_bottom = 181.0
+text = "start"
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="." unique_id=1845838420]
 spawn_path = NodePath("..")

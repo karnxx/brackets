@@ -197,7 +197,7 @@ func assign_roles():
 	reset_roles()
 	var plrs = get_tree().get_nodes_in_group("plr")
 	for p in plrs:
-		var assigned_role = "medic" #roleassigng()
+		var assigned_role = roleassigng()
 		p.set_role.rpc(assigned_role)
 		print(p.namnam, " -> ", assigned_role)
 

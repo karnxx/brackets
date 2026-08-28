@@ -237,7 +237,8 @@ offset_top = -23.0
 offset_right = 25.0
 theme_override_fonts/font = ExtResource("3_u4bdd")
 theme_override_font_sizes/font_size = 8
-text = "bravo"
+text = "bravokkkkkkkkk"
 horizontal_alignment = 1
+autowrap_mode = 2
 
 [connection signal="pressed" from="CanvasLayer/VBoxContainer/skip" to="." method="skip_vote"]
