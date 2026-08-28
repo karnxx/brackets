@@ -1037,6 +1037,7 @@ layer_7/z_index = -1
 layer_7/tile_data = PackedInt32Array(-196620, 3, 24, -131084, 3, 24, -65548, 3, 24, -12, 3, 24, 65524, 3, 24, 131060, 3, 24, 196596, 3, 24, -262156, 3, 24, -262170, 3, 24, -196634, 3, 24, -131098, 3, 24, -65562, 3, 24, -26, 3, 24, 65510, 3, 24, 131046, 3, 24, 196582, 3, 24, -262169, 3, 24, -196633, 3, 24, -131097, 3, 24, -65561, 3, 24, -25, 3, 24, 65511, 3, 24, 131047, 3, 24, 196583, 3, 24, -262183, 3, 24, -196647, 3, 24, -131111, 3, 24, -65575, 3, 24, -39, 3, 24, 65497, 3, 24, 131033, 3, 24, 196569, 3, 24, -262182, 3, 24, -196646, 3, 24, -131110, 3, 24, -65574, 3, 24, -38, 3, 24, 65498, 3, 24, 131034, 3, 24, 196570, 3, 24, -262181, 3, 24, -196645, 3, 24, -131109, 3, 24, -65573, 3, 24, -37, 3, 24, 65499, 3, 24, 131035, 3, 24, 196571, 3, 24)
 
 [node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=187001063]
+visible = false
 
 [node name="liv" type="Area2D" parent="." unique_id=385849236]
 script = ExtResource("9_vkk0o")
@@ -1074,12 +1075,19 @@ offset_bottom = 73.0
 color = Color(0.09019608, 0.10980392, 0.047058824, 0.6666667)
 
 [node name="BlackoutTimer" type="Label" parent="CanvasLayer" unique_id=1515612228]
+visible = false
 offset_right = 128.0
 offset_bottom = 71.0
 theme_override_font_sizes/font_size = 24
 text = "LIGHTS OUT IN: 10"
 horizontal_alignment = 1
 autowrap_mode = 3
+
+[node name="Button" type="Button" parent="CanvasLayer" unique_id=1090695010]
+offset_left = 6.0
+offset_top = 150.0
+offset_right = 48.0
+offset_bottom = 181.0
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="." unique_id=1845838420]
 spawn_path = NodePath("..")
@@ -1090,3 +1098,4 @@ position = Vector2(-240, -16)
 [connection signal="body_entered" from="liv" to="liv" method="_on_body_entered"]
 [connection signal="body_entered" from="kit" to="kit" method="_on_body_entered"]
 [connection signal="body_entered" from="kit2" to="kit2" method="_on_body_entered"]
+[connection signal="pressed" from="CanvasLayer/Button" to="." method="start"]

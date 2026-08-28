@@ -1,15 +1,12 @@
 extends Node
 
 const PORT := 7777
-const MAX_PLAYERS := 2
+const MAX_PLAYERS := 3
 const PLAYER_SCENE = preload("res://scsnes/player.tscn")
 
 var spawned_players: Array[int] = []
 var player_data: Dictionary = {}
 
-var roles =  {
-	"INTRUDER":0, "RESIDENT":0, "MEDIC":0
-}
 
 var names = [
 	"Alpha",
@@ -20,12 +17,224 @@ var names = [
 	"Delta",
 	"Echo",
 	"Foxtrot",
-	"Golf"
+	"Golf",
+	"Hotel",
+	"India",
+	"Juliet",
+	"Kilo",
+	"Lima",
+	"Mike",
+	"November",
+	"Oscar",
+	"Papa",
+	"Quebec",
+	"Romeo",
+	"Sierra",
+	"Tango",
+	"Uniform",
+	"Victor",
+	"Whiskey",
+	"Xray",
+	"Yankee",
+	"Zulu",
+	"Atlas",
+	"Nova",
+	"Orion",
+	"Cosmo",
+	"Blaze",
+	"Frost",
+	"Shadow",
+	"Storm",
+	"Ember",
+	"Flint",
+	"Raven",
+	"Onyx",
+	"Ghost",
+	"Viper",
+	"Cobra",
+	"Falcon",
+	"Hawk",
+	"Wolf",
+	"Lynx",
+	"Bear",
+	"Fox",
+	"Otter",
+	"Moose",
+	"Byte",
+	"Pixel",
+	"Glitch",
+	"Cache",
+	"Kernel",
+	"Syntax",
+	"Cipher",
+	"Vector",
+	"Binary",
+	"Logic",
+	"Python",
+	"Rust",
+	"Ruby",
+	"Swift",
+	"Java",
+	"Matrix",
+	"Vertex",
+	"Quantum",
+	"Static",
+	"Socket",
+	"Packet",
+	"Proxy",
+	"Router",
+	"Server",
+	"Client",
+	"Comet",
+	"Meteor",
+	"Astro",
+	"Solar",
+	"Lunar",
+	"Cosmic",
+	"Venus",
+	"Mars",
+	"Jupiter",
+	"Saturn",
+	"Neon",
+	"Chrome",
+	"Plasma",
+	"Flux",
+	"Pulse",
+	"Drift",
+	"Orbit",
+	"Echo2",
+	"Zero",
+	"One",
+	"Two",
+	"Three",
+	"Seven",
+	"Eleven",
+	"Thirteen",
+	"FortyTwo",
+	"Agent9",
+	"Agent47",
+	"AgentX",
+	"Red",
+	"Blue",
+	"Green",
+	"Yellow",
+	"Purple",
+	"Orange",
+	"Crimson",
+	"Silver",
+	"Gold",
+	"Ghostie",
+	"ShadowX",
+	"Night",
+	"Dusk",
+	"Dawn",
+	"Midnight",
+	"Sunset",
+	"Thunder",
+	"Lightning",
+	"Rain",
+	"Snow",
+	"Cloud",
+	"Mist",
+	"Smoke",
+	"Ash",
+	"Coal",
+	"Ice",
+	"Blizzard",
+	"Tornado",
+	"Fang",
+	"Claw",
+	"Blade",
+	"Arrow",
+	"Trigger",
+	"Scout",
+	"Ranger",
+	"Pilot",
+	"Captain",
+	"Major",
+	"Colonel",
+	"Commander",
+	"Chief",
+	"Doctor",
+	"Medic",
+	"Detective",
+	"Inspector",
+	"Officer",
+	"Guard",
+	"Watcher",
+	"Keeper",
+	"Striker",
+	"Rogue",
+	"Nomad",
+	"Bandit",
+	"Outlaw",
+	"Mercury",
+	"Venom",
+	"Jester",
+	"Phantom",
+	"Wraith",
+	"Specter",
+	"Reaper",
+	"Grim",
+	"Hex",
+	"Rune",
+	"Void",
+	"Ace",
+	"Boss",
+	"King",
+	"Queen",
+	"Prince",
+	"Knight",
+	"Wizard",
+	"Hero",
+	"Legend",
+	"Rookie",
+	"Pro",
+	"Chip",
+	"Bit",
+	"ByteX",
+	"404",
+	"404NotFound",
+	"Null",
+	"Undefined",
+	"Overflow",
+	"Stack",
+	"Pointer",
+	"Memory",
+	"Core",
+	"Thread",
+	"Process",
+	"Daemon",
+	"Root",
+	"Admin",
+	"Localhost",
+	"Loopback",
+	"Terminal",
+	"Console",
+	"Debugger",
+	"Compiler",
+	"Linker",
+	"Builder",
+	"Coder",
+	"Dev",
+	"User",
+	"Guest",
+	"Unknown",
+	"Nobody",
+	"Somebody",
+	"Random",
+	"Karna",
+	"Mayukh | Phonk Lord",
+	"Xx_Mayukh_xX",
+	"NotRealMayukh",
+	"THEBIGMSM",
+	"msm",
+	"WhrsMayukh",
+	"Mayukhthehonoredone",
+	"Tuff"
 ]
 
-var intweight = 0.25
-var resweight = 0.50
-var medweight = 0.25
+
 
 func _ready():
 	multiplayer.peer_disconnected.connect(_on_peer_disconnected)
@@ -71,7 +280,6 @@ func request_spawn():
 		spawn_player.rpc_id(
 			new_player_id,
 			existing_id,
-			data["role"],
 			data["name"]
 		)
 	_register_and_spawn(new_player_id)
@@ -80,16 +288,14 @@ func _register_and_spawn(id: int):
 	if id in spawned_players:
 		return
 	spawned_players.append(id)
-	var player_role = roleassigng()
 	var player_name = nameassign()
 	player_data[id] = {
-		"role": player_role,
 		"name": player_name
 	}
-	spawn_player.rpc(id, player_role, player_name)
+	spawn_player.rpc(id, player_name)
 
 @rpc("authority", "call_local", "reliable")
-func spawn_player(id: int, assigned_role: String, assigned_name: String):
+func spawn_player(id: int, assigned_name: String):
 	if get_tree().current_scene == null:
 		return
 	if get_tree().current_scene.has_node(str(id)):
@@ -97,12 +303,10 @@ func spawn_player(id: int, assigned_role: String, assigned_name: String):
 	var player = PLAYER_SCENE.instantiate()
 	player.name = str(id)
 	player.set_multiplayer_authority(id)
-	player.role = assigned_role
 	player.namnam = assigned_name
 	get_tree().current_scene.add_child(player)
 	print(
 		"Spawned player: ", id,
-		" | Role: ", player.role,
 		" | Name: ", player.namnam,
 		" | Local ID: ", multiplayer.get_unique_id()
 	)
@@ -114,21 +318,6 @@ func _on_peer_disconnected(id: int):
 	var player = get_tree().current_scene.get_node_or_null(str(id))
 	if player:
 		player.queue_free()
-
-func roleassigng():
-	var randa = randf()
-	if randa <= medweight or randa <= intweight:
-		var randa2 = randf()
-		if randa2 <= 0.5 and roles["MEDIC"] == 0:
-			roles["MEDIC"] = 1
-			return "medic"
-		elif roles["INTRUDER"] == 0:
-			roles["INTRUDER"] = 1
-			return "intruder"
-		else:
-			return "resident"
-	else:
-		return "resident"
 
 func nameassign():
 	return names.pick_random()
