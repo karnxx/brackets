@@ -40,13 +40,11 @@ func _ready():
 	else:
 		$CanvasLayer/Button.visible = false
 
-
 func start():
 	if not multiplayer.is_server():
 		return
-	assign_roles()
+	roleasign()
 	startgam.rpc()
-
 
 @rpc("authority", "call_local", "reliable")
 func startgam():
@@ -56,18 +54,15 @@ func startgam():
 	if multiplayer.is_server():
 		start_lightitmer()
 
-
 func start_lightitmer():
 	if not multiplayer.is_server():
 		return
-
 	rnd += 1
 	vote_light = false
-	begin_white.rpc()
-
+	whitee.rpc()
 
 @rpc("authority", "call_local", "reliable")
-func begin_white():
+func whitee():
 	state = 1
 	$CanvasModulate.color = Color.WHITE
 	pstart = Time.get_ticks_msec()
@@ -75,41 +70,32 @@ func begin_white():
 	timer_running = true
 	white.emit()
 
-
-func begin_action_window():
+func blablalba():
 	if not multiplayer.is_server():
 		return
-
 	timer_running = false
 	blackout_started = false
 	pending_choices.clear()
-
 	darken.rpc()
-
 	plrs = get_tree().get_nodes_in_group("plr")
 	pending_actions = 0
-
 	for p in plrs:
 		if not p.ded and (p.role == "intruder" or p.role == "medic"):
 			pending_actions += 1
-
 	for i in plrs:
 		if not i.ded and (i.role == "intruder" or i.role == "medic"):
 			i.carry_role.rpc_id(i.get_multiplayer_authority())
-
 	if pending_actions == 0:
-		resolve_actions_and_start_blackout()
+		resaction()
 	else:
-		get_tree().create_timer(15.0).timeout.connect(force_start_blackout)
+		get_tree().create_timer(15.0).timeout.connect(fblackout)
 
-
-func force_start_blackout():
+func fblackout():
 	if not blackout_started:
-		resolve_actions_and_start_blackout()
-
+		resaction()
 
 @rpc("any_peer", "call_remote", "reliable")
-func submit_action(action_role: String, target_id: int):
+func subaction(action_role: String, target_id: int):
 	if not multiplayer.is_server():
 		return
 	var sender_id = multiplayer.get_remote_sender_id()
@@ -145,128 +131,93 @@ func submit_action(action_role: String, target_id: int):
 		target.namnam
 	)
 	if pending_actions <= 0 and not blackout_started:
-		resolve_actions_and_start_blackout()
+		resaction()
 
-
-func resolve_actions_and_start_blackout():
+func resaction():
 	if not multiplayer.is_server() or blackout_started:
 		return
-
 	blackout_started = true
-
 	print("RESOLVING ACTIONS")
-
-	# kills resolve first
 	for sender_id in pending_choices:
 		var choice = pending_choices[sender_id]
-
 		if choice["role"] == "intruder":
 			var target = get_tree().current_scene.get_node_or_null(str(choice["target"]))
-
 			if target and not target.ded:
 				print("KILLING: ", target.namnam)
 				target.die.rpc()
-
-	# medic help resolves after
 	for sender_id in pending_choices:
 		var choice = pending_choices[sender_id]
-
 		if choice["role"] == "medic":
 			var target = get_tree().current_scene.get_node_or_null(str(choice["target"]))
-
 			if target == null:
 				continue
-
 			if target.ded:
 				print("REVIVING: ", target.namnam)
 				target.revive.rpc()
 			else:
 				print("SHIELDING: ", target.namnam)
 				target.set_shield.rpc(true)
-
 	pending_choices.clear()
-
-	begin_blackout.rpc()
-
+	blackout.rpc()
 
 @rpc("authority", "call_local", "reliable")
 func darken():
 	state = 0
 	$CanvasModulate.color = Color(0.08, 0.08, 0.08)
 
-
 @rpc("authority", "call_local", "reliable")
-func begin_blackout():
+func blackout():
 	state = 0
 	$CanvasModulate.color = Color(0.08, 0.08, 0.08)
-
 	pstart = Time.get_ticks_msec()
 	pdurara = blacktime
 	timer_running = true
-
 	black.emit()
 
-
-func begin_vote_or_skip():
+func vota2():
 	if not multiplayer.is_server():
 		return
-
 	if voting_started:
 		return
-
 	voting_started = true
 	votes.clear()
-
 	plrs = get_tree().get_nodes_in_group("plr")
-
 	var alive_count := 0
 	var intu := false
-
-	for p in plrs:
-		if not p.ded:
+	for i in plrs:
+		if not i.ded:
 			alive_count += 1
-			if p.role == "intruder":
+			if i.role == "intruder":
 				intu = true
-
 	print("SERVER ROLES:")
-
-	for p in plrs:
-		print(p.namnam, " = ", p.role, " | ded: ", p.ded)
-
+	for i in plrs:
+		print(i.namnam, " = ", i.role, " | ded: ", i.ded)
 	if alive_count <= 2 and intu:
 		intwin()
 		voting_started = false
 		return
-
 	if alive_count <= 2:
-		voting_end()
+		votend()
 		return
-
-	# Turn lights ON for EVERYONE before voting
-	begin_voting.rpc()
-
-	for p in plrs:
-		if not p.ded:
-			p.start_vote.rpc_id(p.get_multiplayer_authority())
-
-	get_tree().create_timer(15.0).timeout.connect(voting_end)
-
+	startvote.rpc()
+	for i in plrs:
+		if not i.ded:
+			i.start_vote.rpc_id(i.get_multiplayer_authority())
+	get_tree().create_timer(15.0).timeout.connect(votend)
 
 @rpc("authority", "call_local", "reliable")
-func begin_voting():
+func startvote():
 	state = 1
 	$CanvasModulate.color = Color.WHITE
 	timer_running = false
 	$CanvasLayer/BlackoutTimer.text = "VOTING"
 	white.emit()
 
-
 func intwin():
 	pass
 
-
 @rpc("any_peer", "call_remote", "reliable")
-func cast_vote(target_id: int):
+func vota(target_id: int):
 	if not multiplayer.is_server():
 		return
 	var voter_id = multiplayer.get_remote_sender_id()
@@ -284,25 +235,14 @@ func cast_vote(target_id: int):
 		return
 	votes[voter_id] = target_id
 	var alive_count := 0
-	for p in get_tree().get_nodes_in_group("plr"):
-		if not p.ded:
+	for i in get_tree().get_nodes_in_group("plr"):
+		if not i.ded:
 			alive_count += 1
-	print(
-		"VOTE | ",
-		voter.namnam,
-		" -> ",
-		target.namnam,
-		" | ",
-		votes.size(),
-		"/",
-		alive_count
-	)
 	if votes.size() >= alive_count:
-		voting_end()
-
+		votend()
 
 @rpc("any_peer", "call_remote", "reliable")
-func cast_skip():
+func skip():
 	if not multiplayer.is_server():
 		return
 	var voter_id = multiplayer.get_remote_sender_id()
@@ -315,119 +255,78 @@ func cast_skip():
 		return
 	votes[voter_id] = -1
 	var alive_count := 0
-	for p in get_tree().get_nodes_in_group("plr"):
-		if not p.ded:
+	for i in get_tree().get_nodes_in_group("plr"):
+		if not i.ded:
 			alive_count += 1
-	print(
-		"SKIP | ",
-		voter.namnam,
-		" | ",
-		votes.size(),
-		"/",
-		alive_count
-	)
 	if votes.size() >= alive_count:
-		voting_end()
+		votend()
 
-
-func voting_end():
+func votend():
 	if not multiplayer.is_server():
 		return
-
 	if not voting_started:
 		return
-
 	voting_started = false
-
 	var vote_counts := {}
 	var skip_count := 0
-
-	for vote in votes.values():
-		if vote == -1:
+	for i in votes.values():
+		if i == -1:
 			skip_count += 1
 		else:
-			vote_counts[vote] = vote_counts.get(vote, 0) + 1
-
+			vote_counts[i] = vote_counts.get(i, 0) + 1
 	var highest_count := 0
 	var highest_player = null
-
-	for target_id in vote_counts:
-		var target = get_tree().current_scene.get_node_or_null(str(target_id))
-
+	for i in vote_counts:
+		var target = get_tree().current_scene.get_node_or_null(str(i))
 		if target == null or target.ded:
 			continue
-
-		if vote_counts[target_id] > highest_count:
-			highest_count = vote_counts[target_id]
+		if vote_counts[i] > highest_count:
+			highest_count = vote_counts[i]
 			highest_player = target
-
-	for p in get_tree().get_nodes_in_group("plr"):
-		p.cleachoiuca.rpc_id(p.get_multiplayer_authority())
-
-	print("SKIPS:", skip_count)
-	print("HIGHEST:", highest_player, " VOTES:", highest_count)
-
+	for i in get_tree().get_nodes_in_group("plr"):
+		i.cleachoiuca.rpc_id(i.get_multiplayer_authority())
 	votes.clear()
-
 	if skip_count >= highest_count:
 		print("VOTE SKIPPED")
 	elif highest_player:
 		highest_player.die.rpc()
-
-	# After voting, lights remain ON for 10 seconds.
-	begin_vote_light.rpc()
-
+	lightvote.rpc()
 
 @rpc("authority", "call_local", "reliable")
-func begin_vote_light():
+func lightvote():
 	state = 1
 	$CanvasModulate.color = Color.WHITE
-
 	pstart = Time.get_ticks_msec()
 	pdurara = votime
 	timer_running = true
-
 	white.emit()
-
 
 func _process(_delta):
 	if not timer_running:
 		return
-
 	var elapsed := (Time.get_ticks_msec() - pstart) / 1000
 	var remaining: int = pdurara - int(elapsed)
-
 	if remaining < 0:
 		remaining = 0
-
 	$CanvasLayer/BlackoutTimer.text = ("LIGHTS\n00:%02d" if state == 1 else "BLACKOUT\n00:%02d") % remaining
-
 	pulse_timer(remaining <= 3)
-
 	if elapsed >= pdurara and multiplayer.is_server():
 		timer_running = false
-
 		if state == 1:
 			if vote_light:
 				vote_light = false
-				begin_action_window()
+				blablalba()
 			else:
-				# First round:
-				# 30 sec lights -> directly to action
-				begin_action_window()
+				blablalba()
 		else:
-			# Blackout finished -> voting
-			begin_vote_or_skip()
-
+			vota2()
 
 func pulse_timer(urgent: bool):
 	var tween = create_tween()
-
 	if urgent:
 		$CanvasLayer/BlackoutTimer.scale = Vector2(1.3, 1.3)
 	else:
 		$CanvasLayer/BlackoutTimer.scale = Vector2(1.15, 1.15)
-
 	tween.tween_property(
 		$CanvasLayer/BlackoutTimer,
 		"scale",
@@ -435,40 +334,29 @@ func pulse_timer(urgent: bool):
 		0.2
 	)
 
-
-func assign_roles():
+func roleasign():
 	if not multiplayer.is_server():
 		return
-
-	reset_roles()
-
+	resroles()
 	var plrs = get_tree().get_nodes_in_group("plr")
-
-	for p in plrs:
+	for i in plrs:
 		var assigned_role = roleassigng()
-		p.set_role.rpc(assigned_role)
-		print(p.namnam, " -> ", assigned_role)
+		i.set_role.rpc(assigned_role)
 
-
-func reset_roles():
+func resroles():
 	roles["intruder"] = 0
 	roles["medic"] = 0
 
-
 func roleassigng():
 	var randa = randf()
-
 	if randa <= medweight or randa <= intweight:
 		var randa2 = randf()
-
 		if randa2 <= 0.5 and roles["medic"] == 0:
 			roles["medic"] = 1
 			return "medic"
-
 		elif roles["intruder"] == 0:
 			roles["intruder"] = 1
 			return "intruder"
-
 		else:
 			return "resident"
 	else:
