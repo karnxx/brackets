@@ -222,11 +222,6 @@ offset_bottom = 648.0
 mouse_filter = 2
 color = Color(0, 0, 0, 1)
 
-[node name="Button" type="Button" parent="CanvasLayer" unique_id=541103627]
-offset_right = 8.0
-offset_bottom = 8.0
-text = "clear"
-
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1251127559]
 sprite_frames = SubResource("SpriteFrames_player")
 animation = &"0walk1"
@@ -247,4 +242,3 @@ horizontal_alignment = 1
 autowrap_mode = 2
 
 [connection signal="pressed" from="CanvasLayer/VBoxContainer/skip" to="." method="skip_vote"]
-[connection signal="pressed" from="CanvasLayer/Button" to="." method="cleachoiuca"]

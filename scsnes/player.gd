@@ -10,9 +10,13 @@ var is_using = false
 var shield = false
 var ded = false
 
+var killused := false
+var medround := -2
+
 var anima = "0"
 
 var lastvote := -1
+
 
 func _ready() -> void:
 	$Label.text = namnam
@@ -121,6 +125,8 @@ func carry_role():
 	if not is_multiplayer_authority():
 		return
 	if role == "intruder":
+		if killused:
+			return
 		is_using = true
 		for i in get_tree().get_nodes_in_group("plr"):
 			if i != self and i.ded == false:
@@ -129,6 +135,8 @@ func carry_role():
 				bitun.pressed.connect(use.bind(i))
 				$CanvasLayer/VBoxContainer.add_child(bitun)
 	elif role == "medic":
+		if get_parent().rnd - medround < 2:
+			return
 		is_using = true
 		for i in get_tree().get_nodes_in_group("plr"):
 			if i != self:
@@ -173,18 +181,25 @@ func use(bitun):
 	if not is_instance_valid(bitun):
 		return
 	var target_id: int = bitun.get_multiplayer_authority()
-	cleachoiuca()
 	if role == "intruder":
+		if killused:
+			return
 		if bitun.ded:
 			return
+		killused = true
+		cleachoiuca()
 		get_parent().subaction.rpc_id(
 			1,
 			"intruder",
 			target_id
 		)
 	elif role == "medic":
+		if get_parent().rnd - medround < 2:
+			return
 		if bitun == self:
 			return
+		medround = get_parent().rnd
+		cleachoiuca()
 		get_parent().subaction.rpc_id(
 			1,
 			"medic",

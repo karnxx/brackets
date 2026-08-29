@@ -79,12 +79,19 @@ func blablalba():
 	darken.rpc()
 	plrs = get_tree().get_nodes_in_group("plr")
 	pending_actions = 0
-	for p in plrs:
-		if not p.ded and (p.role == "intruder" or p.role == "medic"):
-			pending_actions += 1
 	for i in plrs:
-		if not i.ded and (i.role == "intruder" or i.role == "medic"):
+		i.killused = false
+		if not i.ded and i.role == "intruder":
+			pending_actions += 1
+		if not i.ded and i.role == "medic":
+			if rnd - i.medround >= 2:
+				pending_actions += 1
+	for i in plrs:
+		if not i.ded and i.role == "intruder":
 			i.carry_role.rpc_id(i.get_multiplayer_authority())
+		elif not i.ded and i.role == "medic":
+			if rnd - i.medround >= 2:
+				i.carry_role.rpc_id(i.get_multiplayer_authority())
 	if pending_actions == 0:
 		resaction()
 	else:
