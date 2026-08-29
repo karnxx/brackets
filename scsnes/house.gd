@@ -340,8 +340,13 @@ func roleasign():
 	resroles()
 	var plrs = get_tree().get_nodes_in_group("plr")
 	for i in plrs:
-		var assigned_role = roleassigng()
-		i.set_role.rpc(assigned_role)
+		var rara = roleassigng()
+		i.set_role.rpc(rara)
+		show_role.rpc_id(i.get_multiplayer_authority(), rara)
+
+@rpc("authority", "call_local", "reliable")
+func show_role(assigned_role):
+	await $CanvasLayer/RoleReveal.doit(assigned_role)
 
 func resroles():
 	roles["intruder"] = 0
@@ -350,14 +355,19 @@ func resroles():
 func roleassigng():
 	var randa = randf()
 	if randa <= medweight or randa <= intweight:
-		var randa2 = randf()
-		if randa2 <= 0.5 and roles["medic"] == 0:
-			roles["medic"] = 1
-			return "medic"
-		elif roles["intruder"] == 0:
-			roles["intruder"] = 1
+		var randada = randf()
+		if randada <= 0.5 and roles['intruder'] == 0:
+			roles["intruder"] += 1
 			return "intruder"
-		else:
-			return "resident"
+		elif randada > 0.5 and roles['medic'] == 0:
+			roles['medic'] += 1
+			return "medic"
+	if roles['intruder'] == 0:
+		roles['intruder'] += 1
+		return "intruder"
+	elif roles['medic'] == 0:
+		roles['medic'] += 1
+		return "medic"
 	else:
+		roles['resident'] += 1
 		return "resident"
