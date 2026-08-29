@@ -42,6 +42,7 @@ func am_i_dead() -> bool:
 func _process(_delta: float) -> void:
 	var i_am_dead := am_i_dead()
 	visible = not ded or i_am_dead
+
 	if get_parent() is not Control:
 		if get_parent().state == 1:
 			$CanvasLayer/ColorRect.visible = false
@@ -80,13 +81,16 @@ func set_camera_to_room():
 func _physics_process(_delta: float) -> void:
 	if not is_multiplayer_authority():
 		return
-	
+
 	var dir := Vector2.ZERO
+
 	if Input.is_action_pressed("move_left"):
 		dir.x -= 1
 	if Input.is_action_pressed("move_right"):
 		dir.x += 1
+
 	var anim := "idle"
+
 	if dir != Vector2.ZERO:
 		dir = dir.normalized()
 		anim = "walk"
@@ -94,6 +98,7 @@ func _physics_process(_delta: float) -> void:
 			sprite.flip_h = true
 		elif dir.x > 0:
 			sprite.flip_h = false
+
 	if get_parent() is not Control:
 		if get_parent().state == 1:
 			velocity = dir * 120
@@ -101,8 +106,10 @@ func _physics_process(_delta: float) -> void:
 			velocity = Vector2.ZERO
 	else:
 		velocity = dir * 120
+
 	move_and_slide()
 	sprite.play(anima + anim + ("0" if ded else "1"))
+
 	sync_state.rpc(
 		global_position,
 		anim,
@@ -119,6 +126,9 @@ func cleachoiuca():
 
 @rpc("any_peer", "call_local", "reliable")
 func carry_role():
+	if not is_multiplayer_authority():
+		return
+
 	print(
 		"CARRY ROLE CALLED | Local ID:",
 		multiplayer.get_unique_id(),
@@ -129,6 +139,7 @@ func carry_role():
 		" | Authority:",
 		get_multiplayer_authority()
 	)
+
 	if role == "intruder":
 		is_using = true
 		for i in get_tree().get_nodes_in_group("plr"):
@@ -137,6 +148,7 @@ func carry_role():
 				bitun.text = i.namnam
 				bitun.pressed.connect(use.bind(i))
 				$CanvasLayer/VBoxContainer.add_child(bitun)
+
 	elif role == "medic":
 		is_using = true
 		for i in get_tree().get_nodes_in_group("plr"):
@@ -177,21 +189,41 @@ func set_role(new_role: String):
 func use(bitun):
 	if not is_using:
 		return
+
+	if not is_multiplayer_authority():
+		return
+
+	if not is_instance_valid(bitun):
+		return
+
+	var target_id: int = bitun.get_multiplayer_authority()
+
 	cleachoiuca()
+
 	if role == "intruder":
-		if is_instance_valid(bitun):
-			bitun.die.rpc()
-	elif role == "medic":
-		if not is_instance_valid(bitun):
-			return
 		if bitun.ded:
-			bitun.revive.rpc()
-		else:
-			bitun.set_shield.rpc(true)
+			return
+
+		get_parent().submit_action.rpc_id(
+			1,
+			"intruder",
+			target_id
+		)
+
+	elif role == "medic":
+		if bitun == self:
+			return
+
+		get_parent().submit_action.rpc_id(
+			1,
+			"medic",
+			target_id
+		)
 
 func skip_vote():
 	if lastvote != -1:
 		return
+
 	lastvote = -2
 	$CanvasLayer/VBoxContainer/skip.visible = false
 	cleachoiuca()
@@ -203,23 +235,30 @@ func set_shield(value: bool):
 
 @rpc("any_peer", "call_local", "reliable")
 func vote():
-	cleachoiuca()
+
 	lastvote = -1
+
 	for i in get_tree().get_nodes_in_group("plr"):
 		if i != self and not i.ded:
 			var bitun: Button = preload("res://scsnes/chooseb.tscn").instantiate()
 			bitun.text = i.namnam
-			var target_id := i.get_multiplayer_authority()
+
+			var target_id: int = i.get_multiplayer_authority()
+
 			bitun.pressed.connect(add_vote.bind(target_id))
 			$CanvasLayer/VBoxContainer.add_child(bitun)
+
 	$CanvasLayer/VBoxContainer/skip.visible = true
 
 func add_vote(target_id: int):
 	if lastvote != -1:
 		return
+
 	lastvote = target_id
 	$CanvasLayer/VBoxContainer/skip.visible = false
+
 	for child in $CanvasLayer/VBoxContainer.get_children():
 		if child.name != "skip":
 			child.queue_free()
+
 	get_parent().cast_vote.rpc_id(1, target_id)
