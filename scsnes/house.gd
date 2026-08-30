@@ -101,7 +101,7 @@ func fblackout():
 	if not blackout_started:
 		resaction()
 
-@rpc("any_peer", "call_remote", "reliable")
+@rpc("any_peer", "call_local", "reliable")
 func subaction(action_role: String, target_id: int):
 	if not multiplayer.is_server():
 		return
@@ -223,7 +223,7 @@ func startvote():
 func intwin():
 	pass
 
-@rpc("any_peer", "call_remote", "reliable")
+@rpc("any_peer", "call_local", "reliable")
 func vota(target_id: int):
 	if not multiplayer.is_server():
 		return
@@ -286,7 +286,7 @@ func chatreceive(sender_id: int, message: String):
 
 	sender.chatshow(message)
 
-@rpc("any_peer", "call_remote", "reliable")
+@rpc("any_peer", "call_local", "reliable")
 func skip():
 	if not multiplayer.is_server():
 		return
@@ -334,7 +334,9 @@ func votend():
 	if skip_count >= highest_count:
 		print("VOTE SKIPPED")
 	elif highest_player:
-		highest_player.die.rpc()
+		highest_player.die.rpc(true)
+		if highest_player.role == "intruder":
+			pass
 	lightvote.rpc()
 
 @rpc("authority", "call_local", "reliable")

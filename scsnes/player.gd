@@ -12,6 +12,7 @@ var ded = false
 
 var killused := false
 var medround := -2
+var shieldused := false
 
 var anima = "0"
 
@@ -181,8 +182,8 @@ func carry_role():
 				$CanvasLayer/VBoxContainer.add_child(bitun)
 
 @rpc("any_peer", "call_local", "reliable")
-func die():
-	if shield:
+func die(voting := false):
+	if shield and not voting:
 		set_shield.rpc(false)
 		return
 	ded = true
@@ -256,6 +257,11 @@ func skip_vote():
 
 @rpc("any_peer", "call_local", "reliable")
 func set_shield(value: bool):
+	if value:
+		if shieldused:
+			return
+		shieldused = true
+
 	shield = value
 
 @rpc("any_peer", "call_local", "reliable")
