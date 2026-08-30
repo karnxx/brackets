@@ -248,6 +248,44 @@ func vota(target_id: int):
 	if votes.size() >= alive_count:
 		votend()
 
+const chatdistance := 250.0
+
+
+@rpc("any_peer", "call_remote", "reliable")
+func chatmessage(message: String):
+	if not multiplayer.is_server():
+		return
+	var sender_id = multiplayer.get_remote_sender_id()
+	if sender_id == 0:
+		sender_id = multiplayer.get_unique_id()
+	var sender = get_tree().current_scene.get_node_or_null(str(sender_id))
+	if sender == null or sender.ded:
+		return
+	message = message.strip_edges()
+	if message == "":
+		return
+	if message.length() > 100:
+		message = message.left(100)
+	print("CHAT | ", sender.namnam, ": ", message)
+	for i in get_tree().get_nodes_in_group("plr"):
+		if i == null:
+			continue
+		if sender.global_position.distance_to(i.global_position) <= chatdistance:
+			var id: int = i.get_multiplayer_authority()
+			if id == 1:
+				chatreceive(sender_id, message)
+			else:
+				chatreceive.rpc_id(id, sender_id, message)
+
+@rpc("authority", "call_local", "reliable")
+func chatreceive(sender_id: int, message: String):
+	var sender = get_tree().current_scene.get_node_or_null(str(sender_id))
+
+	if sender == null:
+		return
+
+	sender.chatshow(message)
+
 @rpc("any_peer", "call_remote", "reliable")
 func skip():
 	if not multiplayer.is_server():

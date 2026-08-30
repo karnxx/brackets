@@ -17,6 +17,7 @@ var anima = "0"
 
 var lastvote := -1
 
+var chattime = 0.0
 
 func _ready() -> void:
 	$Label.text = namnam
@@ -45,6 +46,10 @@ func am_i_dead() -> bool:
 
 func _process(_delta: float) -> void:
 	var i_am_dead := am_i_dead()
+	if chattime > 0:
+		chattime -= _delta
+		if chattime <= 0:
+			$chatlvl.hide()
 	visible = not ded or i_am_dead
 	if get_parent() is not Control:
 		if get_parent().state == 1:
@@ -57,8 +62,38 @@ func _process(_delta: float) -> void:
 func _unhandled_input(event):
 	if not is_multiplayer_authority():
 		return
+	if $CanvasLayer/TextEdit.visible:
+		if event.is_action_pressed("chat"):
+			chat_input()
+			get_viewport().set_input_as_handled()
+		return
 	if event.is_action_pressed("interact"):
 		interact()
+	if event.is_action_pressed("chat"):
+		$CanvasLayer/TextEdit.show()
+		$CanvasLayer/TextEdit.grab_focus()
+
+func chat_input():
+	var message = $CanvasLayer/TextEdit.text.strip_edges()
+	if message == "":
+		$CanvasLayer/TextEdit.hide()
+		return
+	if multiplayer.is_server():
+		get_parent().chatmessage(message)
+	else:
+		get_parent().chatmessage.rpc_id(1, message)
+	$CanvasLayer/TextEdit.clear()
+	$CanvasLayer/TextEdit.hide()
+
+func _on_text_edit_gui_input(event):
+	if event is InputEventKey:
+		if event.pressed and event.keycode == KEY_ENTER:
+			chat_input()
+			$CanvasLayer/TextEdit.accept_event()
+
+@rpc("authority", "call_local", "reliable")
+func chatreceive(message):
+	chatshow(message)
 
 func interact():
 	var item = get_hovered_item()
@@ -205,6 +240,11 @@ func use(bitun):
 			"medic",
 			target_id
 		)
+
+func chatshow(message):
+	$chatlvl.text = message
+	$chatlvl.show()
+	chattime = 4.0
 
 func skip_vote():
 	if lastvote != -1:
