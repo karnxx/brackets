@@ -28,7 +28,6 @@ func _ready() -> void:
 	else:
 		$Camera2D.enabled = true
 		set_camera_to_room()
-		print("LOCAL PLAYER CAMERA ENABLED: ", multiplayer.get_unique_id())
 
 @rpc("any_peer", "call_local", "unreliable")
 func sync_state(pos: Vector2, anim: StringName, facing_left: bool, dead: bool):
@@ -46,12 +45,12 @@ func am_i_dead() -> bool:
 	return false
 
 func _process(_delta: float) -> void:
-	var i_am_dead := am_i_dead()
+	var deda := am_i_dead()
 	if chattime > 0:
 		chattime -= _delta
 		if chattime <= 0:
 			$chatlvl.hide()
-	visible = not ded or i_am_dead
+	visible = not ded or deda
 	if get_parent() is not Control:
 		if get_parent().state == 1:
 			$CanvasLayer/ColorRect.visible = false
@@ -200,14 +199,6 @@ func start_vote():
 @rpc("any_peer", "call_local", "reliable")
 func set_role(new_role: String):
 	role = new_role
-	print(
-		"ROLE SET | ",
-		name,
-		" | ",
-		role,
-		" | Local ID: ",
-		multiplayer.get_unique_id()
-	)
 
 func use(bitun):
 	if not is_using:
@@ -216,7 +207,7 @@ func use(bitun):
 		return
 	if not is_instance_valid(bitun):
 		return
-	var target_id: int = bitun.get_multiplayer_authority()
+	var tid: int = bitun.get_multiplayer_authority()
 	if role == "intruder":
 		if killused:
 			return
@@ -224,11 +215,7 @@ func use(bitun):
 			return
 		killused = true
 		cleachoiuca()
-		get_parent().subaction.rpc_id(
-			1,
-			"intruder",
-			target_id
-		)
+		get_parent().subaction.rpc_id(1,"intruder",tid)
 	elif role == "medic":
 		if get_parent().rnd - medround < 2:
 			return
@@ -236,11 +223,7 @@ func use(bitun):
 			return
 		medround = get_parent().rnd
 		cleachoiuca()
-		get_parent().subaction.rpc_id(
-			1,
-			"medic",
-			target_id
-		)
+		get_parent().subaction.rpc_id(1,"medic",tid)
 
 func chatshow(message):
 	$chatlvl.text = message
@@ -261,8 +244,11 @@ func set_shield(value: bool):
 		if shieldused:
 			return
 		shieldused = true
-
 	shield = value
+
+@rpc("any_peer", "call_local", "reliable")
+func reset_kill_flag():
+	killused = false
 
 @rpc("any_peer", "call_local", "reliable")
 func vote():

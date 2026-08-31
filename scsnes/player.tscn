@@ -205,15 +205,22 @@ shape = SubResource("RectangleShape2D_ifeun")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer" unique_id=1557747632]
 z_index = 2
-offset_left = 295.0
-offset_top = 119.0
-offset_right = 506.0
-offset_bottom = 406.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -219.0
+offset_top = -143.5
+offset_right = 219.0
+offset_bottom = 143.5
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="skip" parent="CanvasLayer/VBoxContainer" unique_id=1378435947 instance=ExtResource("2_u4bdd")]
 visible = false
 layout_mode = 2
-text = "skipapa"
+text = "Skip"
 
 [node name="ColorRect" type="ColorRect" parent="CanvasLayer" unique_id=699014261]
 visible = false

@@ -6,7 +6,9 @@ const PLAYER_SCENE = preload("res://scsnes/player.tscn")
 
 var spawned_players: Array[int] = []
 var player_data: Dictionary = {}
+var is_hosting := false
 
+signal hosting_started
 
 var names = [
 	"Alpha",
@@ -235,32 +237,34 @@ var names = [
 ]
 
 
-
 func _ready():
 	multiplayer.peer_disconnected.connect(_on_peer_disconnected)
 
 func host_game():
+	if is_hosting:
+		return
 	var peer = ENetMultiplayerPeer.new()
 	var error = peer.create_server(PORT, MAX_PLAYERS)
 	if error != OK:
-		print("Failed to host: ", error)
+		print("Failed to host: ", error_string(error))
 		return
+	is_hosting = true
 	multiplayer.multiplayer_peer = peer
-	spawned_players.clear()
-	print("Hosting!")
+	print("HOSTING OK on port ", PORT)
+	hosting_started.emit()
 	get_tree().change_scene_to_file("res://scsnes/house.tscn")
 	await get_tree().scene_changed
-	var host_id = multiplayer.get_unique_id()
-	_register_and_spawn(host_id)
+	await get_tree().process_frame
+	_register_and_spawn(multiplayer.get_unique_id())
 
-func join_game(ip: String):
+func join_game(ip: String, port: int = PORT):
 	var peer = ENetMultiplayerPeer.new()
-	var error = peer.create_client(ip, PORT)
+	var error = peer.create_client(ip, port)
 	if error != OK:
 		print("Failed to join: ", error)
 		return
 	multiplayer.multiplayer_peer = peer
-	print("Joining ", ip)
+	print("Joining ", ip, ":", port)
 	await multiplayer.connected_to_server
 	print("Connected to server!")
 	get_tree().change_scene_to_file("res://scsnes/house.tscn")

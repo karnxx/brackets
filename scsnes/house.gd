@@ -33,6 +33,7 @@ var blackout_started := false
 var voting_started := false
 var vote_light := false
 
+const chatdistance := 250.0
 
 func _ready():
 	if multiplayer.is_server():
@@ -80,7 +81,7 @@ func blablalba():
 	plrs = get_tree().get_nodes_in_group("plr")
 	pending_actions = 0
 	for i in plrs:
-		i.killused = false
+		i.reset_kill_flag.rpc_id(i.get_multiplayer_authority())
 		if not i.ded and i.role == "intruder":
 			pending_actions += 1
 		if not i.ded and i.role == "medic":
@@ -102,41 +103,33 @@ func fblackout():
 		resaction()
 
 @rpc("any_peer", "call_local", "reliable")
-func subaction(action_role: String, target_id: int):
+func subaction(rola: String, tid: int):
 	if not multiplayer.is_server():
 		return
-	var sender_id = multiplayer.get_remote_sender_id()
-	if sender_id == 0:
-		sender_id = multiplayer.get_unique_id()
-	if pending_choices.has(sender_id):
+	var sid = multiplayer.get_remote_sender_id()
+	if sid == 0:
+		sid = multiplayer.get_unique_id()
+	if pending_choices.has(sid):
 		return
-	var sender = get_tree().current_scene.get_node_or_null(str(sender_id))
-	var target = get_tree().current_scene.get_node_or_null(str(target_id))
+	var sender = get_tree().current_scene.get_node_or_null(str(sid))
+	var target = get_tree().current_scene.get_node_or_null(str(tid))
 	if sender == null or target == null:
 		return
 	if sender.ded:
 		return
-	if sender.role != action_role:
+	if sender.role != rola:
 		return
-	if action_role == "intruder":
+	if rola == "intruder":
 		if target.ded:
 			return
-	elif action_role == "medic":
+	elif rola == "medic":
 		if target == sender:
 			return
-	pending_choices[sender_id] = {
-		"role": action_role,
-		"target": target_id
+	pending_choices[sid] = {
+		"role": rola,
+		"target": tid
 	}
 	pending_actions -= 1
-	print(
-		"ACTION RECEIVED | ",
-		sender.namnam,
-		" | ",
-		action_role,
-		" | TARGET: ",
-		target.namnam
-	)
 	if pending_actions <= 0 and not blackout_started:
 		resaction()
 
@@ -144,25 +137,21 @@ func resaction():
 	if not multiplayer.is_server() or blackout_started:
 		return
 	blackout_started = true
-	print("RESOLVING ACTIONS")
-	for sender_id in pending_choices:
-		var choice = pending_choices[sender_id]
-		if choice["role"] == "intruder":
-			var target = get_tree().current_scene.get_node_or_null(str(choice["target"]))
+	for i in pending_choices:
+		var cc = pending_choices[i]
+		if cc["role"] == "intruder":
+			var target = get_tree().current_scene.get_node_or_null(str(cc["target"]))
 			if target and not target.ded:
-				print("KILLING: ", target.namnam)
 				target.die.rpc()
-	for sender_id in pending_choices:
-		var choice = pending_choices[sender_id]
-		if choice["role"] == "medic":
-			var target = get_tree().current_scene.get_node_or_null(str(choice["target"]))
+	for i in pending_choices:
+		var cc = pending_choices[i]
+		if cc["role"] == "medic":
+			var target = get_tree().current_scene.get_node_or_null(str(cc["target"]))
 			if target == null:
 				continue
 			if target.ded:
-				print("REVIVING: ", target.namnam)
 				target.revive.rpc()
 			else:
-				print("SHIELDING: ", target.namnam)
 				target.set_shield.rpc(true)
 	pending_choices.clear()
 	blackout.rpc()
@@ -196,9 +185,6 @@ func vota2():
 			alive_count += 1
 			if i.role == "intruder":
 				intu = true
-	print("SERVER ROLES:")
-	for i in plrs:
-		print(i.namnam, " = ", i.role, " | ded: ", i.ded)
 	if alive_count <= 2 and intu:
 		intwin()
 		voting_started = false
@@ -221,7 +207,7 @@ func startvote():
 	white.emit()
 
 func intwin():
-	pass
+	showwin.rpc("1")
 
 @rpc("any_peer", "call_local", "reliable")
 func vota(target_id: int):
@@ -248,17 +234,17 @@ func vota(target_id: int):
 	if votes.size() >= alive_count:
 		votend()
 
-const chatdistance := 250.0
+
 
 
 @rpc("any_peer", "call_remote", "reliable")
 func chatmessage(message: String):
 	if not multiplayer.is_server():
 		return
-	var sender_id = multiplayer.get_remote_sender_id()
-	if sender_id == 0:
-		sender_id = multiplayer.get_unique_id()
-	var sender = get_tree().current_scene.get_node_or_null(str(sender_id))
+	var sid = multiplayer.get_remote_sender_id()
+	if sid == 0:
+		sid = multiplayer.get_unique_id()
+	var sender = get_tree().current_scene.get_node_or_null(str(sid))
 	if sender == null or sender.ded:
 		return
 	message = message.strip_edges()
@@ -266,44 +252,41 @@ func chatmessage(message: String):
 		return
 	if message.length() > 100:
 		message = message.left(100)
-	print("CHAT | ", sender.namnam, ": ", message)
 	for i in get_tree().get_nodes_in_group("plr"):
 		if i == null:
 			continue
 		if sender.global_position.distance_to(i.global_position) <= chatdistance:
 			var id: int = i.get_multiplayer_authority()
 			if id == 1:
-				chatreceive(sender_id, message)
+				chatreceive(sid, message)
 			else:
-				chatreceive.rpc_id(id, sender_id, message)
+				chatreceive.rpc_id(id, sid, message)
 
 @rpc("authority", "call_local", "reliable")
-func chatreceive(sender_id: int, message: String):
-	var sender = get_tree().current_scene.get_node_or_null(str(sender_id))
-
+func chatreceive(ida: int, message: String):
+	var sender = get_tree().current_scene.get_node_or_null(str(ida))
 	if sender == null:
 		return
-
 	sender.chatshow(message)
 
 @rpc("any_peer", "call_local", "reliable")
 func skip():
 	if not multiplayer.is_server():
 		return
-	var voter_id = multiplayer.get_remote_sender_id()
-	if voter_id == 0:
-		voter_id = multiplayer.get_unique_id()
-	if votes.has(voter_id):
+	var votera = multiplayer.get_remote_sender_id()
+	if votera == 0:
+		votera = multiplayer.get_unique_id()
+	if votes.has(votera):
 		return
-	var voter = get_tree().current_scene.get_node_or_null(str(voter_id))
+	var voter = get_tree().current_scene.get_node_or_null(str(votera))
 	if voter == null or voter.ded:
 		return
-	votes[voter_id] = -1
-	var alive_count := 0
+	votes[votera] = -1
+	var aliveppl := 0
 	for i in get_tree().get_nodes_in_group("plr"):
 		if not i.ded:
-			alive_count += 1
-	if votes.size() >= alive_count:
+			aliveppl += 1
+	if votes.size() >= aliveppl:
 		votend()
 
 func votend():
@@ -336,8 +319,12 @@ func votend():
 	elif highest_player:
 		highest_player.die.rpc(true)
 		if highest_player.role == "intruder":
-			pass
+			showwin.rpc("2")
 	lightvote.rpc()
+
+@rpc("authority", "call_local", "reliable")
+func showwin(result: String):
+	$CanvasLayer/win.enda(result)
 
 @rpc("authority", "call_local", "reliable")
 func lightvote():
@@ -392,8 +379,8 @@ func roleasign():
 		show_role.rpc_id(i.get_multiplayer_authority(), rara)
 
 @rpc("authority", "call_local", "reliable")
-func show_role(assigned_role):
-	await $CanvasLayer/RoleReveal.doit(assigned_role)
+func show_role(i):
+	await $CanvasLayer/RoleReveal.doit(i)
 
 func resroles():
 	roles["intruder"] = 0
@@ -409,12 +396,20 @@ func roleassigng():
 		elif randada > 0.5 and roles['medic'] == 0:
 			roles['medic'] += 1
 			return "medic"
-	if roles['intruder'] == 0:
-		roles['intruder'] += 1
-		return "intruder"
-	elif roles['medic'] == 0:
-		roles['medic'] += 1
-		return "medic"
+	var randadada = randf()
+	if randadada <= 0.5 :
+		if roles['intruder'] == 0:
+			roles['intruder'] += 1
+			return "intruder"
+		elif roles['medic'] == 0:
+			roles['medic'] += 1
+			return "medic"
 	else:
-		roles['resident'] += 1
-		return "resident"
+		if roles['medic'] == 0:
+			roles['medic'] += 1
+			return "medic"
+		elif roles['intruder'] == 0:
+			roles['intruder'] += 1
+			return "intruder"
+	roles['resident'] += 1
+	return "resident"

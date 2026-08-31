@@ -6,7 +6,7 @@ extends Control
 func doit(role):
 	show()
 	var tween = create_tween()
-	$CenterContainer/VBoxContainer/RoleName.text = role
+	$CenterContainer/VBoxContainer/RoleName.text = role.to_upper()
 	if role == "intruder":
 		$CenterContainer/VBoxContainer/Description.text = "Eliminate the Residents without being discovered"
 	if role == "medic":

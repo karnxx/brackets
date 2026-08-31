@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://c1fblhnsbv3ya" path="res://scsnes/fish.tscn" id="10_4mt0s"]
 [ext_resource type="PackedScene" uid="uid://drlvjqgna74og" path="res://scsnes/role_reveal.tscn" id="10_j416d"]
 [ext_resource type="PackedScene" uid="uid://k2becg1ujjda" path="res://scsnes/fridge.tscn" id="10_u4uwn"]
+[ext_resource type="PackedScene" uid="uid://ctsgiapgiviow" path="res://scsnes/win.tscn" id="11_j416d"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_j416d"]
 texture = ExtResource("1_yyg7u")
@@ -1092,6 +1093,9 @@ offset_bottom = 181.0
 text = "start"
 
 [node name="RoleReveal" parent="CanvasLayer" unique_id=1437011798 instance=ExtResource("10_j416d")]
+visible = false
+
+[node name="win" parent="CanvasLayer" unique_id=1241859645 instance=ExtResource("11_j416d")]
 visible = false
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="." unique_id=1845838420]
