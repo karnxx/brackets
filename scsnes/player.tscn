@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://dspl1x2clbmus" path="res://scsnes/chooseb.tscn" id="2_u4bdd"]
 [ext_resource type="FontFile" uid="uid://5ku3dbw8g1jl" path="res://scsnes/PressStart2P-Regular.ttf" id="3_u4bdd"]
 [ext_resource type="Texture2D" uid="uid://c400b3o45d5qp" path="res://assets/character1.png" id="3_ycj3m"]
+[ext_resource type="Texture2D" uid="uid://ds0i2d2r35nll" path="res://assets/text1.png" id="5_exek1"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ifeun"]
 size = Vector2(22, 42)
@@ -192,6 +193,10 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_j416d"]
+texture = ExtResource("5_exek1")
+texture_margin_left = 3.0
+
 [node name="player" type="CharacterBody2D" unique_id=1433435195 groups=["plr"]]
 z_index = 1
 y_sort_enabled = true
@@ -261,11 +266,16 @@ anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -70.0
-offset_top = 22.0
+offset_top = -62.0
 offset_right = 70.0
-offset_bottom = 45.0
+offset_bottom = -26.0
 grow_horizontal = 2
+theme_override_fonts/font = ExtResource("3_u4bdd")
+theme_override_font_sizes/font_size = 7
+theme_override_styles/normal = SubResource("StyleBoxTexture_j416d")
+text = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 horizontal_alignment = 1
+vertical_alignment = 1
 autowrap_mode = 3
 
 [connection signal="pressed" from="CanvasLayer/VBoxContainer/skip" to="." method="skip_vote"]
