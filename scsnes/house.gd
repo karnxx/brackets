@@ -160,6 +160,8 @@ func resaction():
 func darken():
 	state = 0
 	$CanvasModulate.color = Color(0.08, 0.08, 0.08)
+	if $AudioStreamPlayer != null:
+		$AudioStreamPlayer.play()
 
 @rpc("authority", "call_local", "reliable")
 func blackout():

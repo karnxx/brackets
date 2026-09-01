@@ -12,6 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://drlvjqgna74og" path="res://scsnes/role_reveal.tscn" id="10_j416d"]
 [ext_resource type="PackedScene" uid="uid://k2becg1ujjda" path="res://scsnes/fridge.tscn" id="10_u4uwn"]
 [ext_resource type="PackedScene" uid="uid://ctsgiapgiviow" path="res://scsnes/win.tscn" id="11_j416d"]
+[ext_resource type="AudioStream" uid="uid://c30u4y6of5amy" path="res://scsnes/dragon-studio-spooky-transition-401719.mp3" id="13_kwrwn"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_j416d"]
 texture = ExtResource("1_yyg7u")
@@ -1103,6 +1104,9 @@ spawn_path = NodePath("..")
 
 [node name="fridge" parent="." unique_id=658590000 instance=ExtResource("10_u4uwn")]
 position = Vector2(-240, -16)
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1885108408]
+stream = ExtResource("13_kwrwn")
 
 [connection signal="body_entered" from="liv" to="liv" method="_on_body_entered"]
 [connection signal="body_entered" from="kit" to="kit" method="_on_body_entered"]
