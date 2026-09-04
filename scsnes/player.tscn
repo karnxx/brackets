@@ -396,6 +396,9 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_edx85"]
+light_mode = 1
+
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_j416d"]
 texture = ExtResource("5_exek1")
 expand_margin_left = 5.0
@@ -472,15 +475,16 @@ autowrap_mode = 2
 
 [node name="chatlvl" type="Label" parent="." unique_id=1908330932]
 visible = false
+material = SubResource("CanvasItemMaterial_edx85")
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -56.000004
-offset_top = 21.999989
-offset_right = 2194.0
-offset_bottom = 771.0
+offset_left = -11.300003
+offset_top = 23.449982
+offset_right = 450.7
+offset_bottom = 714.4502
 grow_horizontal = 2
 grow_vertical = 0
 scale = Vector2(0.05, 0.05)

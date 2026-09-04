@@ -13,8 +13,8 @@ grow_vertical = 2
 script = ExtResource("1_bwqms")
 
 [node name="CLOCK BG" type="Sprite2D" parent="." unique_id=1535062895]
-position = Vector2(1000, 330)
-scale = Vector2(6, 6)
+position = Vector2(1072, 483.00006)
+scale = Vector2(21.333332, 19.714287)
 texture = ExtResource("2_7gebl")
 region_enabled = true
 region_rect = Rect2(36.81989, 0, 24.130714, 49)

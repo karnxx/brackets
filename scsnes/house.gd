@@ -287,7 +287,6 @@ func vota(target_id: int):
 	if votes.size() >= alive_count:
 		votend()
 
-# ROOM SCRIPT
 @rpc("any_peer", "call_remote", "reliable")
 func chatmessage(message: String):
 	if not multiplayer.is_server():

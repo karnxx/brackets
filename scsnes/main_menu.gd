@@ -23,11 +23,11 @@ func _ready() -> void:
 
 
 func _on_button_hover() -> void:
-	animate_clock(Vector2(6.25, 6.25))
+	animate_clock(Vector2(23, 23))
 
 
 func _on_button_unhover() -> void:
-	animate_clock(Vector2(6.0, 6.0))
+	animate_clock(Vector2(20, 20))
 
 
 func animate_clock(target_scale: Vector2) -> void:

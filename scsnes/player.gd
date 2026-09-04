@@ -135,6 +135,9 @@ func set_camera_to_room():
 func _physics_process(_delta: float) -> void:
 	if not is_multiplayer_authority():
 		return
+	if $CanvasLayer/TextEdit.has_focus():
+		velocity = Vector2.ZERO
+		return
 	var dir := Vector2.ZERO
 	if Input.is_action_pressed("move_left"):
 		dir.x -= 1
@@ -249,9 +252,7 @@ func chatshow(message):
 	$chatlvl.text = message
 	$chatlvl.show()
 	await get_tree().process_frame
-	var bottom_y := 0
 	$chatlvl.size.y = $chatlvl.get_combined_minimum_size().y
-	$chatlvl.position.y = bottom_y - $chatlvl.size.y
 	chattime = 4.0
 
 func skip_vote():
