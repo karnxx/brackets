@@ -1,7 +1,7 @@
 extends Node
 
 const PORT := 7777
-const MAX_PLAYERS := 3
+const MAX_PLAYERS := 10
 const PLAYER_SCENE = preload("res://scsnes/player.tscn")
 
 var spawned_players: Array[int] = []
@@ -236,6 +236,8 @@ var names = [
 	"Tuff"
 ]
 
+var animes = ["0","1","2","3"]
+var animenumber = 0
 
 func _ready():
 	multiplayer.peer_disconnected.connect(_on_peer_disconnected)
@@ -252,6 +254,7 @@ func host_game():
 	multiplayer.multiplayer_peer = peer
 	print("HOSTING OK on port ", PORT)
 	hosting_started.emit()
+	
 	get_tree().change_scene_to_file("res://scsnes/house.tscn")
 	await get_tree().scene_changed
 	await get_tree().process_frame
@@ -306,6 +309,8 @@ func spawn_player(id: int, assigned_name: String):
 		return
 	var player = PLAYER_SCENE.instantiate()
 	player.name = str(id)
+	player.set_anim(animes[animenumber])
+	animenumber = (animenumber + 1) % animes.size()
 	player.set_multiplayer_authority(id)
 	player.namnam = assigned_name
 	get_tree().current_scene.add_child(player)

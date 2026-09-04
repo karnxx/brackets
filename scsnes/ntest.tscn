@@ -54,16 +54,18 @@ placeholder_text = "PORT"
 
 [node name="Label" type="Label" parent="." unique_id=529854470]
 layout_mode = 0
-offset_top = 58.0
+offset_top = 25.0
 offset_right = 1152.0
 offset_bottom = 188.0
+scale = Vector2(0.05, 0.05)
 theme_override_fonts/font = ExtResource("2_ygpc2")
+theme_override_font_sizes/font_size = 418
 text = "To host, go to playit.gg, and then
  click on add udp tunnel pointing to 7777
--share the ip (example \"abc1234.playit.gg\")
- and the port (example - 41234)
--for hosts just activate the tunneling then host,
-- for joiners just add the ip and port and then join"
+-share the ip&port (example \"abc1234.playit.gg:17481\", 
+here ip is \"abc1234.playit.gg\" and port is
+\"17481\")
+- for joining just fill it out there and click on join"
 horizontal_alignment = 1
 
 [connection signal="pressed" from="CenterContainer/VBoxContainer/host" to="." method="_on_host_pressed"]

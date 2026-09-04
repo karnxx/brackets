@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://bxwn6crvy5ms5"]
+
+[ext_resource type="Texture2D" uid="uid://cgf0x41l3juun" path="res://assets/map/bluddle.png" id="1_2pbxd"]
+[ext_resource type="Script" uid="uid://bw406ur4kgbph" path="res://scsnes/bluddle.gd" id="1_8blv8"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ifeun"]
+size = Vector2(74, 114)
+
+[node name="bluddle" type="Area2D" unique_id=937056595]
+scale = Vector2(0.5, 0.5)
+collision_layer = 0
+script = ExtResource("1_8blv8")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1539115238]
+texture = ExtResource("1_2pbxd")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1600741429]
+position = Vector2(0, -43)
+shape = SubResource("RectangleShape2D_ifeun")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="body_exited" from="." to="." method="_on_body_exited"]

@@ -11,6 +11,13 @@ signal white
 var plrs
 var plrdex = {}
 
+@onready var emp: TextureRect = $CanvasLayer/CenterContainer/emp
+@onready var ful: TextureRect = $CanvasLayer/CenterContainer/ful
+
+
+var flickeringa = false
+var flicktween 
+
 var votes = {}
 
 var started := false
@@ -38,12 +45,15 @@ const chatdistance := 250.0
 func _ready():
 	if multiplayer.is_server():
 		$CanvasLayer/Button.visible = true
+		$CanvasLayer/TextureRect.visible = false
 	else:
 		$CanvasLayer/Button.visible = false
+		$CanvasLayer/TextureRect.visible = false
 
 func start():
 	if not multiplayer.is_server():
 		return
+	print('ikthe')
 	roleasign()
 	startgam.rpc()
 
@@ -51,9 +61,47 @@ func start():
 func startgam():
 	started = true
 	$CanvasLayer/Button.visible = false
-	$CanvasLayer/BlackoutTimer.visible = true
+	$CanvasLayer/BlackoutTimer.visible = false
 	if multiplayer.is_server():
 		start_lightitmer()
+
+func flickerflocker():
+	if flicktween and flicktween.is_valid():
+		flicktween.kill()
+	var darkaa
+	if state == 1:
+		darkaa = true
+	else:
+		darkaa = false
+	var colo1
+	var colo2
+	if darkaa:
+		colo1 = Color.WHITE
+		colo2 = Color(0.15, 0.15, 0.15)
+	else:
+		colo1 = Color(0.08, 0.08, 0.08)
+		colo2 = Color(0.4, 0.4, 0.4)
+	var plara = get_tree().current_scene.get_node_or_null(str(multiplayer.get_unique_id()))
+	flicktween = create_tween()
+	var flicks = 9
+	for i in range(flicks):
+		$AudioStreamPlayer2.pitch_scale = randf_range(0.8, 1.3)
+		$AudioStreamPlayer2.volume_db = randf_range(-10.0, 0.0)
+		$AudioStreamPlayer2.play()
+		var arnda = randf_range(0.15, 0.35)
+		flicktween.tween_property($CanvasModulate, "color", colo2, arnda * 0.35)
+		flicktween.parallel().tween_property(ful, "modulate:a", randf_range(0.1, 0.4), arnda * 0.35)
+		flicktween.tween_property($CanvasModulate, "color", colo1, arnda * 0.65)
+		flicktween.parallel().tween_property(ful, "modulate:a", 1.0, arnda * 0.65)
+	flicktween.tween_callback(func():
+		ful.modulate.a = 1.0
+		$CanvasModulate.color = colo1
+	)
+
+func bloodpile(plar):
+	var blooda = preload("res://scsnes/bluddle.tscn").instantiate()
+	blooda.global_position = Vector2(plar.global_position.x,22)
+	add_child(blooda)
 
 func start_lightitmer():
 	if not multiplayer.is_server():
@@ -69,6 +117,7 @@ func whitee():
 	pstart = Time.get_ticks_msec()
 	pdurara = lightitme
 	timer_running = true
+	flickeringa = false
 	white.emit()
 
 func blablalba():
@@ -143,6 +192,7 @@ func resaction():
 			var target = get_tree().current_scene.get_node_or_null(str(cc["target"]))
 			if target and not target.ded:
 				target.die.rpc()
+				$AudioStreamPlayer4.play()
 	for i in pending_choices:
 		var cc = pending_choices[i]
 		if cc["role"] == "medic":
@@ -170,6 +220,7 @@ func blackout():
 	pstart = Time.get_ticks_msec()
 	pdurara = blacktime
 	timer_running = true
+	flickeringa = false
 	black.emit()
 
 func vota2():
@@ -236,9 +287,7 @@ func vota(target_id: int):
 	if votes.size() >= alive_count:
 		votend()
 
-
-
-
+# ROOM SCRIPT
 @rpc("any_peer", "call_remote", "reliable")
 func chatmessage(message: String):
 	if not multiplayer.is_server():
@@ -257,6 +306,8 @@ func chatmessage(message: String):
 	for i in get_tree().get_nodes_in_group("plr"):
 		if i == null:
 			continue
+		if i.room != sender.room:
+			continue
 		if sender.global_position.distance_to(i.global_position) <= chatdistance:
 			var id: int = i.get_multiplayer_authority()
 			if id == 1:
@@ -270,6 +321,10 @@ func chatreceive(ida: int, message: String):
 	if sender == null:
 		return
 	sender.chatshow(message)
+	for i in range(message.length()):
+		$AudioStreamPlayer3.pitch_scale = randf_range(0.2, 1.6)
+		$AudioStreamPlayer3.play()
+		await get_tree().create_timer(0.51).timeout
 
 @rpc("any_peer", "call_local", "reliable")
 func skip():
@@ -320,6 +375,7 @@ func votend():
 		print("VOTE SKIPPED")
 	elif highest_player:
 		highest_player.die.rpc(true)
+		$AudioStreamPlayer4.play()
 		if highest_player.role == "intruder":
 			showwin.rpc("2")
 	lightvote.rpc()
@@ -328,6 +384,7 @@ func votend():
 func showwin(result: String):
 	$CanvasLayer/win.enda(result)
 
+
 @rpc("authority", "call_local", "reliable")
 func lightvote():
 	state = 1
@@ -335,6 +392,7 @@ func lightvote():
 	pstart = Time.get_ticks_msec()
 	pdurara = votime
 	timer_running = true
+	flickeringa = false
 	white.emit()
 
 func _process(_delta):
@@ -344,6 +402,9 @@ func _process(_delta):
 	var remaining: int = pdurara - int(elapsed)
 	if remaining < 0:
 		remaining = 0
+	if remaining <= 5 and remaining > 0 and not flickeringa:
+		flickeringa = true
+		flickerflocker()
 	$CanvasLayer/BlackoutTimer.text = ("LIGHTS\n00:%02d" if state == 1 else "BLACKOUT\n00:%02d") % remaining
 	pulse_timer(remaining <= 3)
 	if elapsed >= pdurara and multiplayer.is_server():

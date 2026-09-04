@@ -20,11 +20,13 @@ var lastvote := -1
 
 var chattime = 0.0
 
+var footsteps = "n"
+
 func _ready() -> void:
 	$Label.text = namnam
 	if not is_multiplayer_authority():
 		$Camera2D.enabled = false
-		$CanvasLayer.visible = false
+
 	else:
 		$Camera2D.enabled = true
 		set_camera_to_room()
@@ -35,17 +37,22 @@ func sync_state(pos: Vector2, anim: StringName, facing_left: bool, dead: bool):
 		return
 	global_position = pos
 	ded = dead
-	sprite.play(anima + anim + ("0" if ded else "1"))
+	sprite.play((anima if ded == false else "0") + anim + ("" if ded else "1"))
 	sprite.flip_h = facing_left
 
 func am_i_dead() -> bool:
-	for p in get_tree().get_nodes_in_group("plr"):
-		if p.is_multiplayer_authority():
-			return p.ded
+	for i in get_tree().get_nodes_in_group("plr"):
+		if i.is_multiplayer_authority():
+			return i.ded
 	return false
 
 func _process(_delta: float) -> void:
 	var deda := am_i_dead()
+	if footsteps == "n" and $AudioStreamPlayer.stream != preload("res://scsnes/freesound_community-footsteps-on-tile-31653-[AudioTrimmer.com].mp3"):
+		$AudioStreamPlayer.stream = preload("res://scsnes/freesound_community-footsteps-on-tile-31653-[AudioTrimmer.com].mp3")
+	elif footsteps == "b" and $AudioStreamPlayer.stream != preload("res://scsnes/freesound_community-jumpintopuddle-96895-[AudioTrimmer.com].mp3") :
+		print("whodou")
+		$AudioStreamPlayer.stream = preload("res://scsnes/freesound_community-jumpintopuddle-96895-[AudioTrimmer.com].mp3")
 	if chattime > 0:
 		chattime -= _delta
 		if chattime <= 0:
@@ -73,6 +80,11 @@ func _unhandled_input(event):
 		$CanvasLayer/TextEdit.show()
 		$CanvasLayer/TextEdit.grab_focus()
 
+func play():
+	if not $AudioStreamPlayer.playing:
+		$AudioStreamPlayer.pitch_scale = randf_range(0.9, 1.1)
+		$AudioStreamPlayer.play()
+
 func chat_input():
 	var message = $CanvasLayer/TextEdit.text.strip_edges()
 	if message == "":
@@ -94,6 +106,10 @@ func _on_text_edit_gui_input(event):
 @rpc("authority", "call_local", "reliable")
 func chatreceive(message):
 	chatshow(message)
+
+@rpc("authority", "call_local", "reliable")
+func set_anim(d):
+	anima = d
 
 func interact():
 	var item = get_hovered_item()
@@ -134,13 +150,15 @@ func _physics_process(_delta: float) -> void:
 			sprite.flip_h = false
 	if get_parent() is not Control:
 		if get_parent().state == 1:
-			velocity = dir * 120
+			velocity = dir * 60
+			if dir != Vector2.ZERO:
+				play()
 		else:
 			velocity = Vector2.ZERO
 	else:
-		velocity = dir * 120
+		velocity = dir * 60
 	move_and_slide()
-	sprite.play(anima + anim + ("0" if ded else "1"))
+	sprite.play((anima if ded == false else "0") + anim + ("" if ded else "1"))
 	sync_state.rpc(
 		global_position,
 		anim,
@@ -186,6 +204,8 @@ func die(voting := false):
 		set_shield.rpc(false)
 		return
 	ded = true
+	if get_parent() is not Control:
+		get_parent().bloodpile(self)
 
 @rpc("any_peer", "call_local", "reliable")
 func revive():
@@ -228,6 +248,10 @@ func use(bitun):
 func chatshow(message):
 	$chatlvl.text = message
 	$chatlvl.show()
+	await get_tree().process_frame
+	var bottom_y := 0
+	$chatlvl.size.y = $chatlvl.get_combined_minimum_size().y
+	$chatlvl.position.y = bottom_y - $chatlvl.size.y
 	chattime = 4.0
 
 func skip_vote():
