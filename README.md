@@ -1,0 +1,1 @@
+Brackets is a fast-paced multiplayer game built around one rule: don’t trust anyone. Players battle inside a mysterious house where the lights constantly black out, creating tense moments of uncertainty. Read your opponent, bluff your intentions, survive the darkness, and outsmart them before they outsmart you.
